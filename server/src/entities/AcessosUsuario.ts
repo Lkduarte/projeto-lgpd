@@ -1,15 +1,12 @@
 import moment from "moment-timezone";
 import {
   BeforeInsert,
-  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from "typeorm";
 import { Usuario } from "./Usuario";
 

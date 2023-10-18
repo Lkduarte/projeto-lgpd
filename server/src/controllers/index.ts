@@ -1,4 +1,5 @@
 import termoController from "./TermoController";
-import usuarioController from "./usuarioController";
+import perfilController from "./PerfilController";
+import usuarioController from "./UsuarioController";
 
-export { termoController, usuarioController };
+export { termoController, usuarioController, perfilController };

@@ -1,4 +1,3 @@
-import moment from "moment-timezone";
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -6,37 +5,32 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  OneToMany,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Perfil } from "./Perfil";
-import { UsuarioTermo } from "./UsuarioTermo";
+import { Usuario } from "./Usuario";
+import { Termo } from "./Termo";
+import moment from "moment-timezone";
 
-@Entity("usuarios")
-export class Usuario {
+@Entity("usuario_termo")
+export class UsuarioTermo {
   @PrimaryGeneratedColumn("uuid")
   usuario_id: string;
 
-  @Column({ type: "text", nullable: false, unique: true })
-  nomeUsuario: string;
-
-  @Column({ type: "text", nullable: false })
-  password: string;
+  @PrimaryGeneratedColumn("uuid")
+  termo_id: string;
 
   @Column({ type: "boolean", nullable: false })
-  permiteReceberEmailPromocoes: boolean;
+  aceito: boolean;
 
-  @Column({ type: "boolean", nullable: false })
-  permiteReceberEmailInfos: boolean;
+  @ManyToOne(() => Usuario, (usuario) => usuario.usuario_id)
+  @JoinColumn({ name: "usuario_id", referencedColumnName: "usuario_id" })
+  usuario: Usuario;
 
-  @OneToOne(() => Perfil)
-  @JoinColumn()
-  perfil: Perfil;
-
-  @OneToMany(() => UsuarioTermo, (ut) => ut.usuario)
-  termosAssinados: UsuarioTermo[];
+  @ManyToOne(() => Termo, (termo) => termo.termo_id)
+  @JoinColumn({ name: "termo_id", referencedColumnName: "termo_id" })
+  termo: Termo;
 
   @CreateDateColumn()
   created_at: Date;

@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import { Usuario } from "../entities";
-import { usuarioValidator } from "../utils/validators";
-import { usuarioService } from "../services";
+import { Perfil } from "../entities";
+import { perfilService } from "../services";
 
 const BAD_REQUEST_STATUS = 400;
 const SUCCESS_STATUS = 200;
@@ -9,19 +8,10 @@ const INTERNAL_SERVER_ERROR_STATUS = 500;
 
 class PerfilController {
   async save(req: Request, res: Response) {
-    if (!req.body)
-      return res
-        .status(BAD_REQUEST_STATUS)
-        .json({ error: "Nenhum dado recebido." });
-
-    const usuario: Usuario = req.body;
-    const validate = usuarioValidator.validateSave(usuario);
-
-    if (validate)
-      return res.status(BAD_REQUEST_STATUS).json({ error: validate });
+    const perfil: Perfil = req.body;
 
     try {
-      const result = await usuarioService.save(usuario);
+      const result = await perfilService.save(perfil);
 
       return res.status(SUCCESS_STATUS).json(result);
     } catch (e) {
@@ -32,19 +22,10 @@ class PerfilController {
   }
 
   async update(req: Request, res: Response) {
-    if (!req.body)
-      return res
-        .status(BAD_REQUEST_STATUS)
-        .json({ error: "Nenhum dado recebido." });
-
-    const usuario: Usuario = req.body;
-    const validate = usuarioValidator.validateUpdate(usuario);
-
-    if (validate)
-      return res.status(BAD_REQUEST_STATUS).json({ error: validate });
+    const perfil: Perfil = req.body;
 
     try {
-      const result = await usuarioService.update(usuario);
+      const result = await perfilService.update(perfil);
 
       return res.status(SUCCESS_STATUS).json(result);
     } catch (e) {
@@ -56,7 +37,7 @@ class PerfilController {
 
   async list(req: Request, res: Response) {
     try {
-      const result = await usuarioService.list();
+      const result = await perfilService.list();
 
       return res.status(SUCCESS_STATUS).json(result);
     } catch (e) {
@@ -80,31 +61,7 @@ class PerfilController {
         .json({ error: "Nenhum dado recebido." });
 
     try {
-      const result = await usuarioService.getById(usuario_id);
-
-      return res.status(SUCCESS_STATUS).json(result);
-    } catch (e) {
-      return res
-        .status(INTERNAL_SERVER_ERROR_STATUS)
-        .json({ error: e.message });
-    }
-  }
-
-  async getByUsername(req: Request, res: Response) {
-    if (!req.params)
-      return res
-        .status(BAD_REQUEST_STATUS)
-        .json({ error: "Nenhum dado recebido." });
-
-    const { nomeUsuario } = req.params;
-
-    if (!nomeUsuario)
-      return res
-        .status(BAD_REQUEST_STATUS)
-        .json({ error: "Nenhum dado recebido." });
-
-    try {
-      const result = await usuarioService.getByUsername(nomeUsuario);
+      const result = await perfilService.getById(usuario_id);
 
       return res.status(SUCCESS_STATUS).json(result);
     } catch (e) {
@@ -128,7 +85,7 @@ class PerfilController {
         .json({ error: "Nenhum dado recebido." });
 
     try {
-      const result = await usuarioService.deleteById(usuario_id);
+      const result = await perfilService.deleteById(usuario_id);
 
       return res.status(SUCCESS_STATUS).json(result);
     } catch (e) {
