@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import Styles from "";
+// import'from'""
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../contexts/auth-context";
 import useAlert from "../../../utils/alerts";
@@ -34,14 +34,14 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className={Styles.imagem}>
-      <div className={Styles.container_login}>
-        <div className={Styles.wrap_login}>
-          <form className={Styles.login_form} onSubmit={handleSubmit}>
-            <span className={Styles.login_form_title}>Ionic Health™</span>
-            <div className={Styles.wrap_input}>
+    <div className='imagem'>
+      <div className='container_login'>
+        <div className='wrap_login'>
+          <form className='login_form' onSubmit={handleSubmit}>
+            <span className='login_form_title'>Ionic Health™</span>
+            <div className='wrap_input'>
               <input
-                className={Styles.input}
+                className='input'
                 type="email"
                 value={email}
                 onChange={(e) => {
@@ -49,13 +49,13 @@ const Login: React.FC = () => {
                 }}
               />
               <span
-                className={Styles.focus_input}
+                className='focus_input'
                 data-placeholder="Endereço de e-mail"
               ></span>
             </div>
-            <div className={Styles.wrap_input}>
+            <div className='wrap_input'>
               <input
-                className={Styles.input}
+                className='input'
                 type="password"
                 value={password}
                 onChange={(e) => {
@@ -63,20 +63,20 @@ const Login: React.FC = () => {
                 }}
               />
               <span
-                className={Styles.focus_input}
+                className='focus_input'
                 data-placeholder="Sua senha"
               ></span>
             </div>
 
-            <div className={Styles.container_login_form_btn}>
-              <button type="submit" className={Styles.login_form_btn}>
+            <div className='container_login_form_btn'>
+              <button type="submit" className='login_form_btn'>
                 Entrar
               </button>
             </div>
             <div>
               <button
-                onClick={passwordRecoveryHandler}
-                className={Styles.recovery_password_form_btn}
+                // onClick={passwordRecoveryHandler}
+                className='recovery_password_form_btn'
               >
                 Esqueci minha senha
               </button>

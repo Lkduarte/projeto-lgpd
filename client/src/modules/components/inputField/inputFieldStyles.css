@@ -1,0 +1,22 @@
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    gap: 3px;
+}
+
+.inputField {
+    border: 1px solid #323232;
+    background-color: #545353;
+    border-radius: 4px;
+    outline: none;
+    font-size: 13px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    color: #EEEEEE;
+}
+
+.labelInputComponent {
+    color: #EEEEEE;
+    font-size: 14px;
+}

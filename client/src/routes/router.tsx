@@ -1,8 +1,9 @@
 import { useContext } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthContext, AuthProvider } from "../contexts/auth-context";
-import { Login } from "../modules/pages/login/login";
 import { Home } from "../modules/pages/home";
+import Login from "../modules/pages/login/login";
+import UserRegister from "../modules/pages/users/usersRegister";
 
 export const Router = () => {
   const Private = ({ children }: any) => {
@@ -30,15 +31,7 @@ export const Router = () => {
                 <Navigate to="/home" />
               </Private>
             }
-          />
-          <Route
-            path="*"
-            element={
-              <Private>
-                <Navigate to="/home" />
-              </Private>
-            }
-          />
+          />?
           <Route path="/login" element={<Login />} />
           <Route
             path="/home"
@@ -48,6 +41,7 @@ export const Router = () => {
               </Private>
             }
           />
+          <Route path="/userRegister" element={<UserRegister />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

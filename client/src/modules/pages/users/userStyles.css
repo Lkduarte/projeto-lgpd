@@ -1,0 +1,52 @@
+.registerContainer {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    width: 70%;
+    margin: auto auto;
+    gap: 2%;
+}
+
+#userName {
+    width: 49%;
+}
+
+#userEmail {
+    width: 49%;
+}
+
+#userDocument {
+    width: 25%;
+}
+
+#userPhone {
+    width: 22%;
+}
+
+#userStreet {
+    width: 49.1%;
+}
+
+#houseNumber {
+    width: 20%;
+}
+
+#userNeighborhood {
+    width: 26.9%;
+}
+
+#userCity {
+    width: 23.5%;
+}
+
+#userState {
+    width: 23.5%;
+}
+
+#userZipCode {
+    width: 20%;
+}
+
+#userCountry {
+    width: 26.9%;
+}
