@@ -5,9 +5,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { UsuarioTermo } from "./UsuarioTermo";
 
 @Entity("termos")
 export class Termo {
@@ -19,6 +21,9 @@ export class Termo {
 
   @Column({ type: "boolean", nullable: false })
   isAtual: boolean;
+
+  @OneToMany(() => UsuarioTermo, (ut) => ut.termo)
+  usuariosAssinantes: UsuarioTermo[];
 
   @CreateDateColumn()
   created_at: Date;

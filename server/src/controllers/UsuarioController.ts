@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Usuario } from "../entities";
-import { usuarioValidator } from "../utils/validators";
 import { usuarioService } from "../services";
 
 const BAD_REQUEST_STATUS = 400;
@@ -9,16 +8,7 @@ const INTERNAL_SERVER_ERROR_STATUS = 500;
 
 class UsuarioController {
   async save(req: Request, res: Response) {
-    if (!req.body)
-      return res
-        .status(BAD_REQUEST_STATUS)
-        .json({ error: "Nenhum dado recebido." });
-
     const usuario: Usuario = req.body;
-    const validate = usuarioValidator.validateSave(usuario);
-
-    if (validate)
-      return res.status(BAD_REQUEST_STATUS).json({ error: validate });
 
     try {
       const result = await usuarioService.save(usuario);
@@ -32,16 +22,7 @@ class UsuarioController {
   }
 
   async update(req: Request, res: Response) {
-    if (!req.body)
-      return res
-        .status(BAD_REQUEST_STATUS)
-        .json({ error: "Nenhum dado recebido." });
-
     const usuario: Usuario = req.body;
-    const validate = usuarioValidator.validateUpdate(usuario);
-
-    if (validate)
-      return res.status(BAD_REQUEST_STATUS).json({ error: validate });
 
     try {
       const result = await usuarioService.update(usuario);
@@ -132,6 +113,38 @@ class UsuarioController {
 
       return res.status(SUCCESS_STATUS).json(result);
     } catch (e) {
+      return res
+        .status(INTERNAL_SERVER_ERROR_STATUS)
+        .json({ error: e.message });
+    }
+  }
+
+  async assinarTermo(req: Request, res: Response) {
+    if (!req.params)
+      return res
+        .status(BAD_REQUEST_STATUS)
+        .json({ error: "Nenhum dado recebido." });
+
+    const { usuario_id, termo_id } = req.params;
+
+    if (
+      !usuario_id ||
+      usuario_id.trim() == "" ||
+      !termo_id ||
+      termo_id.trim() == ""
+    )
+      return res.status(BAD_REQUEST_STATUS).json({ error: "Dados inválidos" });
+
+    try {
+      const result = await usuarioService.assinarTermo(
+        usuario_id,
+        termo_id,
+        true
+      );
+
+      return res.status(SUCCESS_STATUS).json(result);
+    } catch (e) {
+      console.log(e);
       return res
         .status(INTERNAL_SERVER_ERROR_STATUS)
         .json({ error: e.message });

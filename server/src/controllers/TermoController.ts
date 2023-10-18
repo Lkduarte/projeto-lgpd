@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Termo } from "../entities";
-import { termoValidator } from "../utils/validators";
 import { termoService } from "../services";
 
 const BAD_REQUEST_STATUS = 400;
@@ -9,19 +8,12 @@ const INTERNAL_SERVER_ERROR_STATUS = 500;
 
 class TermoController {
   async save(req: Request, res: Response) {
-    if (!req.body)
-      return res
-        .status(BAD_REQUEST_STATUS)
-        .json({ error: "Nenhum dado recebido." });
-
     const termo: Termo = req.body;
-    const validate = termoValidator.validateSave(termo);
-
-    if (validate)
-      return res.status(BAD_REQUEST_STATUS).json({ error: validate });
 
     try {
       const result = await termoService.save(termo);
+
+      // Chamar função para notificar os usuários que um novo termo está ativo
 
       return res.status(SUCCESS_STATUS).json(result);
     } catch (e) {
