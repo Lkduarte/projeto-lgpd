@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthContext, AuthProvider } from "../contexts/auth-context";
 import { Home } from "../modules/pages/home";
 import Login from "../modules/pages/login/login";
-import UserRegister from "../modules/pages/users/usersRegister";
+import { UserRegisterPage } from "../modules/pages/users/usersRegister";
 
 export const Router = () => {
   const Private = ({ children }: any) => {
@@ -31,7 +31,8 @@ export const Router = () => {
                 <Navigate to="/home" />
               </Private>
             }
-          />?
+          />
+          ?
           <Route path="/login" element={<Login />} />
           <Route
             path="/home"
@@ -41,7 +42,7 @@ export const Router = () => {
               </Private>
             }
           />
-          <Route path="/userRegister" element={<UserRegister />} />
+          <Route path="/userRegister" element={<UserRegisterPage />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
