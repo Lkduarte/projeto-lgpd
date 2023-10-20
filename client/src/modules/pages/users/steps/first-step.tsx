@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import InputFieldComponent from "../../../components/inputField/inputFieldComponent";
+import { InputFieldComponent } from "../../../components/inputField/inputFieldComponent";
 import { WizardContext } from "../wizard-context";
 
 export const FirstStep = () => {
@@ -9,7 +9,7 @@ export const FirstStep = () => {
   // ao user e também uma demonstração de exibição de mensagens de erro
 
   return (
-    <>
+    <div className="wizardContainerFS">
       <InputFieldComponent
         name="userName"
         idContainer="userName"
@@ -56,6 +56,6 @@ export const FirstStep = () => {
       {errors.passwordConfirmation && (
         <label>{errors.passwordConfirmation}</label>
       )}
-    </>
+    </div>
   );
 };

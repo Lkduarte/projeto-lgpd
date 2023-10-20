@@ -12,7 +12,7 @@ type props = {
   onChange?: (t: any) => void;
 };
 
-const InputFieldComponent = (props: props) => {
+export const InputFieldComponent = (props: props) => {
   return (
     <div id={props.idContainer} className="inputContainer">
       <label htmlFor={props.htmlFor} className="labelInputComponent">
@@ -30,5 +30,3 @@ const InputFieldComponent = (props: props) => {
     </div>
   );
 };
-
-export default InputFieldComponent;

@@ -1,52 +1,113 @@
 .registerContainer {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
-    width: 70%;
-    margin: auto auto;
-    gap: 2%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
+  width: 40%;
+  height: 55%;
+  background-color: #333;
+  color: #eee;
+  border-radius: 20px;
+}
+
+.wizardContainerFS {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2%;
+}
+
+.wizardContainerSS {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 2%;
+}
+
+.buttonContainer {
+  position: absolute;
+  bottom: 40px;
+  right: 33px;
+}
+
+.wizardButtons {
+  border: none;
+  border-radius: 5px;
+  padding: 10px 30px;
+  color: #eee;
+  cursor: pointer;
+  margin-left: 10px;
+
+  background-color: rgb(79, 134, 136);
+}
+
+.checkboxContainer {
+  margin-top: 10px;
+}
+
+.checkbox {
+  padding: 5px;
 }
 
 #userName {
-    width: 49%;
+  width: 100%;
 }
 
 #userEmail {
-    width: 49%;
+  width: 100%;
 }
 
 #userDocument {
-    width: 25%;
+  width: 49%;
 }
 
 #userPhone {
-    width: 22%;
-}
-
-#userStreet {
-    width: 49.1%;
-}
-
-#houseNumber {
-    width: 20%;
-}
-
-#userNeighborhood {
-    width: 26.9%;
-}
-
-#userCity {
-    width: 23.5%;
-}
-
-#userState {
-    width: 23.5%;
+  width: 49%;
 }
 
 #userZipCode {
-    width: 20%;
+  width: 17%;
 }
 
-#userCountry {
-    width: 26.9%;
+#userStreet {
+  width: 62%;
+}
+
+#houseNumber {
+  width: 17%;
+}
+
+#userComplement {
+  width: 49%;
+}
+
+#userNeighborhood {
+  width: 49%;
+}
+
+#userCity {
+  width: 49%;
+}
+
+#userState {
+  width: 49%;
+}
+
+#passwordConfirmation {
+  width: 49%;
+}
+
+#password {
+  width: 49%;
+}
+
+#userTermo {
+  resize: none;
+  background-color: #333;
+  color: #eee;
+  margin-bottom: 10px;
+  overflow-y: scroll;
+  border: none;
+  border-radius: 5px;
 }

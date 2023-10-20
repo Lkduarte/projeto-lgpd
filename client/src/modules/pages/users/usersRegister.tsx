@@ -14,11 +14,11 @@ export const UserRegister: React.FC = () => {
       {step === WizardSteps.first_module && <FirstStep />}
       {step === WizardSteps.second_module && <SecondStep />}
       {step === WizardSteps.third_module && <ThirdStep />}
-      <div className="botoes-wizard">
+      <div className="buttonContainer">
         {step !== WizardSteps.first_module && (
-          <button onClick={backStep}>Voltar</button>
+          <button className="wizardButtons" onClick={backStep}>Voltar</button>
         )}
-        <button onClick={nextStep}>
+        <button className="wizardButtons" onClick={nextStep}>
           {step === WizardSteps.third_module ? "Finalizar" : "Continuar"}
         </button>
       </div>

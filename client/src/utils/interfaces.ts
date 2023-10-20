@@ -6,6 +6,9 @@ interface IUserRegister {
   cpf: string;
   telefone: string;
   endereco: IEndereco;
+  termo_id: string;
+  permiteReceberEmailPromocoes: boolean;
+  permiteReceberEmailInfos: boolean;
 }
 
 interface IEndereco {
@@ -16,6 +19,11 @@ interface IEndereco {
   bairro: string;
   cidade: string;
   estado: string;
+}
+
+interface ITermo {
+  termo_id: string;
+  nomeTermo: string;
 }
 
 interface IUserValidation {
@@ -38,4 +46,4 @@ interface IEnderecoValidation {
   estado: string | null;
 }
 
-export type { IUserRegister, IEndereco, IUserValidation };
+export type { IUserRegister, IEndereco, IUserValidation, ITermo };

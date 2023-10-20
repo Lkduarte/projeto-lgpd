@@ -1,10 +1,15 @@
-import React, { createContext, useState } from "react";
-import { IUserRegister, IUserValidation } from "../../../utils/interfaces";
+import React, { createContext, useEffect, useState } from "react";
+import {
+  ITermo,
+  IUserRegister,
+  IUserValidation,
+} from "../../../utils/interfaces";
 
 interface WizardProps {
   user: IUserRegister;
   step: WizardSteps;
   errors: IUserValidation;
+  termo: ITermo;
   setErrors: (e: IUserValidation) => void;
   setStep: (e: WizardSteps) => void;
   setUser: (e: IUserRegister) => void;
@@ -35,6 +40,9 @@ const defaultUser: IUserRegister = {
     cidade: "",
     estado: "",
   },
+  permiteReceberEmailInfos: false,
+  permiteReceberEmailPromocoes: false,
+  termo_id: "",
 };
 
 // Objeto initial de validação, quando um campo estiver NULL significa que não há erros vinculados a ele,
@@ -63,6 +71,7 @@ const WizardProvider = ({ children }: any) => {
   const [user, setUser] = useState(defaultUser);
   const [step, setStep] = useState(WizardSteps.first_module);
   const [errors, setErrors] = useState(defaultValidation);
+  const [termo, setTermo] = useState<ITermo>({} as ITermo);
 
   const finish = () => {
     //VALIDAR CAMPOS
@@ -126,6 +135,10 @@ const WizardProvider = ({ children }: any) => {
     return true;
   };
 
+  useEffect(() => {
+    //loadTermo();
+  }, []);
+
   return (
     <WizardContext.Provider
       value={{
@@ -138,6 +151,7 @@ const WizardProvider = ({ children }: any) => {
         finish,
         errors,
         setErrors,
+        termo,
       }}
     >
       {children}
