@@ -34,10 +34,15 @@ const Login: React.FC = () => {
     login(email, password);
   };
 
+  const handleRegister = (e: any) => {
+    e.preventDefault();
+    navigate('/userRegister')
+  };
+
   return (
 
     <div className='loginContainer'>
-      <form className='loginForm' onSubmit={handleSubmit}>
+      <div className='loginForm'>
         <InputFieldComponent
           label="E-mail"
           htmlFor="email"
@@ -60,18 +65,18 @@ const Login: React.FC = () => {
         />
 
         
-        <div className='buttonContainer'>
-          <button type="submit" className='loginButton'>
+        <div className='loginButtonContainer'>
+          <button onClick={handleSubmit} type="submit" className='loginButton'>
             Entrar
           </button>
-          <button className='linkButton'>
+          {/* <button className='linkButton'>
             Esqueci minha senha
-          </button>
-          <button className='linkButton'>
+          </button> */}
+          <button onClick={handleRegister} className='linkButton'>
             Não possui conta? Cadastre-se
           </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
