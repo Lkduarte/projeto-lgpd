@@ -1,0 +1,49 @@
+.loginContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
+  width: 35%;
+  height: 70%;
+  background-color: #333;
+  border-radius: 10px;
+}
+
+.loginForm {
+  margin-top: 100px;
+  width: 100%;
+}
+
+.loginButtonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.loginButton {
+  background-color: #4fb4bc;
+  padding: 10px 0;
+  border: none;
+  border-radius: 5px;
+  color: #FFF;
+  cursor: pointer;
+}
+
+.linkButton {
+  background-color: transparent;
+  text-decoration: underline;
+  padding: 10px 0;
+  border: none;
+  border-radius: 5px;
+  color: #3e0eed;
+  cursor: pointer;
+}
+
+.linkButton:hover {
+  color: #e1ddef;
+}
+
+

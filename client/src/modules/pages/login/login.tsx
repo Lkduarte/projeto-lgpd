@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
-// import'from'""
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../contexts/auth-context";
 import useAlert from "../../../utils/alerts";
+import './loginStyles.css'
+import { InputFieldComponent } from "../../components/inputField/inputFieldComponent";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -33,55 +34,47 @@ const Login: React.FC = () => {
     login(email, password);
   };
 
-  return (
-    <div className='imagem'>
-      <div className='container_login'>
-        <div className='wrap_login'>
-          <form className='login_form' onSubmit={handleSubmit}>
-            <span className='login_form_title'>Ionic Health™</span>
-            <div className='wrap_input'>
-              <input
-                className='input'
-                type="email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-              <span
-                className='focus_input'
-                data-placeholder="Endereço de e-mail"
-              ></span>
-            </div>
-            <div className='wrap_input'>
-              <input
-                className='input'
-                type="password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
-              <span
-                className='focus_input'
-                data-placeholder="Sua senha"
-              ></span>
-            </div>
+  const handleRegister = (e: any) => {
+    e.preventDefault();
+    navigate('/userRegister')
+  };
 
-            <div className='container_login_form_btn'>
-              <button type="submit" className='login_form_btn'>
-                Entrar
-              </button>
-            </div>
-            <div>
-              <button
-                // onClick={passwordRecoveryHandler}
-                className='recovery_password_form_btn'
-              >
-                Esqueci minha senha
-              </button>
-            </div>
-          </form>
+  return (
+
+    <div className='loginContainer'>
+      <div className='loginForm'>
+        <InputFieldComponent
+          label="E-mail"
+          htmlFor="email"
+          idContainer="loginEmail"
+          value={email}
+          type="email"
+          onChange={(e) => { setEmail(e.target.value) }}
+          id="email"
+          name="email"
+        />
+        <InputFieldComponent
+          label="Senha"
+          htmlFor="senha"
+          idContainer="loginSenha"
+          value={password}
+          type="password"
+          onChange={(e) => { setPassword(e.target.value) }}
+          id="senha"
+          name="password"
+        />
+
+        
+        <div className='loginButtonContainer'>
+          <button onClick={handleSubmit} type="submit" className='loginButton'>
+            Entrar
+          </button>
+          {/* <button className='linkButton'>
+            Esqueci minha senha
+          </button> */}
+          <button onClick={handleRegister} className='linkButton'>
+            Não possui conta? Cadastre-se
+          </button>
         </div>
       </div>
     </div>
