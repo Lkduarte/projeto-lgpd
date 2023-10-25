@@ -20,7 +20,7 @@ export class Usuario {
   usuario_id: string;
 
   @Column({ type: "text", nullable: false, unique: true })
-  nomeUsuario: string;
+  email: string;
 
   @Column({ type: "text", nullable: false })
   password: string;
@@ -31,7 +31,9 @@ export class Usuario {
   @Column({ type: "boolean", nullable: false })
   permiteReceberEmailInfos: boolean;
 
-  @OneToOne(() => Perfil)
+  @OneToOne(() => Perfil, (perfil) => perfil.usuario, {
+    cascade: true,
+  })
   @JoinColumn()
   perfil: Perfil;
 

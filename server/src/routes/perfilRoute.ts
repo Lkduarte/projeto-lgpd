@@ -5,10 +5,18 @@ import PerfilSchema from "../schemas/perfil";
 
 const router = Router();
 
-router.get("/", perfilController.list);
-router.get("/:usuario_id", perfilController.getById);
-router.post("/", ValidateSchema(PerfilSchema.create), perfilController.save);
-router.put("/", ValidateSchema(PerfilSchema.update), perfilController.update);
-router.delete("/:usuario_id", perfilController.delete);
+router.get("/list", perfilController.list);
+router.get("/getByUserId/:perfil_id", perfilController.getById);
+router.post(
+  "/create",
+  ValidateSchema(PerfilSchema.create),
+  perfilController.save
+);
+router.put(
+  "/update",
+  ValidateSchema(PerfilSchema.update),
+  perfilController.update
+);
+router.delete("/delete/:perfil_id", perfilController.delete);
 
 export default router;
