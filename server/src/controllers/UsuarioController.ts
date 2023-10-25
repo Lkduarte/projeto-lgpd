@@ -56,10 +56,8 @@ class UsuarioController {
     endereco.estado = estado;
 
     // Associar Perfil ao Usuario e Endereco ao Perfil
-    usuario.perfil = perfil;
-    perfil.usuario = usuario;
     perfil.endereco = endereco;
-    endereco.perfil = perfil;
+    usuario.perfil = perfil;
 
     try {
       // Verifica se o usuário com o mesmo e-mail já existe no banco de dados
@@ -85,6 +83,7 @@ class UsuarioController {
       await enderecoRepository.save(endereco);
       await perfilService.save(perfil);
       await usuarioRepository.save(usuario);
+      console.log("aqui foi");
 
       res.status(201).json(usuario);
     } catch (error) {
