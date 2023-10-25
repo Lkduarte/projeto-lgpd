@@ -11,6 +11,19 @@
   border-radius: 20px;
 }
 
+.editContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
+  width: 50%;
+  height: 90%;
+  background-color: #333;
+  color: #eee;
+  border-radius: 20px;
+}
+
 .wizardContainerFS {
   display: flex;
   flex-direction: row;
@@ -29,6 +42,30 @@
   position: absolute;
   bottom: 40px;
   right: 33px;
+}
+
+.editButtonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  width: 100%;
+}
+
+.button {
+  padding: 10px 0;
+  border: none;
+  border-radius: 5px;
+  color: #FFF;
+  cursor: pointer;
+  width: 100%;
+}
+
+.loginButton {
+  background-color: #4fb4bc;
+}
+
+.cancelButton{
+  background-color: #6f6a6a;
 }
 
 .wizardButtons {

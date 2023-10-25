@@ -5,9 +5,6 @@ import { WizardContext } from "../wizard-context";
 export const ThirdStep = () => {
   const { setUser, user, errors, setErrors } = useContext(WizardContext);
 
-  // Esse componente é de exemplo com os inputs já aplicados com value relacionado
-  // ao user e também uma demonstração de exibição de mensagens de erro
-
   return (
     <div className="wizardContainerFS">
       <InputFieldComponent
