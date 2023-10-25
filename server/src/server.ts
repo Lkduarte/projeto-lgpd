@@ -8,16 +8,11 @@ import routes from "./routes";
 AppDataSource.initialize()
   .then(() => {
     console.log(`Data Source conectado a porta: ${process.env.DB_PORT}`);
-
     const app = express();
 
-    app.use(express.json({ limit: "50mb" }));
-    app.use(
-      cors({
-        origin: "http://localhost:8080",
-        credentials: true,
-      })
-    );
+    app.use(express.json());
+    app.use(cors());
+
     app.use(routes);
 
     app.listen(process.env.PORT, () =>
