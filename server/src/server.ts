@@ -18,6 +18,7 @@ AppDataSource.initialize()
         credentials: true,
       })
     );
+
     app.use(routes);
 
     app.listen(process.env.PORT, () =>

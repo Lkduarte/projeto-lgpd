@@ -11,20 +11,15 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Usuario } from "./Usuario";
+import { Endereco } from "./endereco";
 
 @Entity("perfis")
 export class Perfil {
   @PrimaryGeneratedColumn("uuid")
-  usuario_id: string;
+  perfil_id: string;
 
   @Column({ type: "text", nullable: true })
   nomeCompleto: string;
-
-  @Column({ type: "text", nullable: true })
-  nomeSocial: string;
-
-  @Column({ type: "text", nullable: true, unique: true })
-  email: string;
 
   @Column({ type: "text", nullable: true, unique: true })
   cpf: string;
@@ -32,18 +27,23 @@ export class Perfil {
   @Column({ type: "text", nullable: true, unique: true })
   telefone: string;
 
-  @Column({ type: "text", nullable: true })
-  endereco: string;
+  @OneToOne(() => Endereco, (endereco) => endereco.perfil, {
+    cascade: true, // Isto vai lidar com as operações de persistência e remoção automaticamente
+  })
+  @JoinColumn({ name: "perfil_id" }) // Nome da coluna de chave estrangeira em Endereco
+  endereco: Endereco;
+
+  @OneToOne(() => Usuario, (usuario) => usuario.perfil, {
+    onDelete: "CASCADE", // Quando um usuário é excluído, o perfil também será excluído
+  })
+  @JoinColumn({ name: "usuario_id" }) // Nome da coluna de chave estrangeira em Perfil
+  usuario: Usuario;
 
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  @OneToOne(() => Usuario, { cascade: true })
-  @JoinColumn({ name: "usuario_id", referencedColumnName: "usuario_id" })
-  usuario: Usuario;
 
   @BeforeInsert()
   insertCreated() {

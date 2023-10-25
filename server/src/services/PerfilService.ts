@@ -5,16 +5,16 @@ import { perfilRepository } from "../repositories";
 class PerfilService {
   repository: Repository<Perfil> = perfilRepository;
 
-  public getById = (usuario_id: string): Promise<Perfil | null> => {
+  public getById = (perfil_id: string): Promise<Perfil | null> => {
     return this.repository.findOne({
-      where: { usuario_id },
+      where: { perfil_id },
       relations: { usuario: true },
     });
   };
 
-  public getByEmail = (email: string): Promise<Perfil | null> => {
+  public findByCpf = (cpf: string): Promise<Perfil | null> => {
     return this.repository.findOne({
-      where: { email },
+      where: { cpf },
       relations: { usuario: true },
     });
   };
@@ -38,8 +38,8 @@ class PerfilService {
     return this.repository.find({ relations: { usuario: true } });
   };
 
-  public deleteById = (usuario_id: string): Promise<DeleteResult> => {
-    return this.repository.delete({ usuario_id });
+  public deleteById = (perfil_id: string): Promise<DeleteResult> => {
+    return this.repository.delete({ perfil_id });
   };
 }
 
