@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthContext, AuthProvider } from "../contexts/auth-context";
-import { Home } from "../modules/pages/home";
 import Login from "../modules/pages/login/login";
 import { UserRegisterPage } from "../modules/pages/users/usersRegister";
+import { UserEdit } from "../modules/pages/users/userEdit";
+import EditConfirm from "../modules/pages/users/editConfirm";
+import Home from "../modules/pages/home/home";
 
 export const Router = () => {
   const Private = ({ children }: any) => {
@@ -33,15 +35,10 @@ export const Router = () => {
             }
           />
           <Route path="/login" element={<Login />} />
-          <Route
-            path="/home"
-            element={
-              <Private>
-                <Home />
-              </Private>
-            }
-          />
+          <Route path="/home" element={<Home />}/>
           <Route path="/userRegister" element={<UserRegisterPage />} />
+          <Route path="/userEdit" element={<UserEdit />} />
+          <Route path="/editConfirm" element={<EditConfirm />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
