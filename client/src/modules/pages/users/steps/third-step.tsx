@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { InputFieldComponent } from "../../../components/inputField/inputFieldComponent";
 import { WizardContext } from "../wizard-context";
+import { validateCpf, validateTelefone } from "../helper";
 
 export const ThirdStep = () => {
   const { setUser, user, errors, setErrors } = useContext(WizardContext);
@@ -18,10 +19,15 @@ export const ThirdStep = () => {
         idContainer="userDocument"
         label="Documento *"
         placeholder="Documento"
+        maxLength={14}
+        mask="999.999.999-99"
         value={user.cpf}
-        onChange={(e) => setUser({ ...user, cpf: e })}
+        onChange={(e) => {
+          validateCpf(e, errors, setErrors);
+          setUser({ ...user, cpf: e });
+        }}
+        isValid={errors.cpf}
       />
-      {errors.cpf && <label>{errors.cpf}</label>}
       <InputFieldComponent
         htmlFor="phone"
         type="text"
@@ -29,11 +35,16 @@ export const ThirdStep = () => {
         id="phone"
         idContainer="userPhone"
         label="Telefone"
+        maxLength={15}
         placeholder="Telefone"
+        mask={"(99) 99999-9999"}
         value={user.telefone}
-        onChange={(e) => setUser({ ...user, telefone: e })}
+        onChange={(e) => {
+          validateTelefone(e, errors, setErrors);
+          setUser({ ...user, telefone: e });
+        }}
+        isValid={errors.telefone}
       />
-      {errors.telefone && <label>{errors.telefone}</label>}
       <InputFieldComponent
         htmlFor="zipCode"
         type="text"
@@ -45,13 +56,9 @@ export const ThirdStep = () => {
         value={user.endereco.cep}
         onChange={(e) => {
           setUser({ ...user, endereco: { ...user.endereco, cep: e } });
-          setErrors({
-            ...errors,
-            endereco: { ...errors.endereco, cep: "CEP inválido!" },
-          });
         }}
+        isValid={errors.endereco.cep}
       />
-      {errors.endereco.cep && <label>{errors.endereco.cep}</label>}
       <InputFieldComponent
         htmlFor="street"
         type="text"
@@ -64,8 +71,8 @@ export const ThirdStep = () => {
         onChange={(e) =>
           setUser({ ...user, endereco: { ...user.endereco, rua: e } })
         }
+        isValid={errors.endereco.rua}
       />
-      {errors.endereco.rua && <label>{errors.endereco.rua}</label>}
       <InputFieldComponent
         htmlFor="number"
         type="text"
@@ -78,8 +85,8 @@ export const ThirdStep = () => {
         onChange={(e) =>
           setUser({ ...user, endereco: { ...user.endereco, numero: e } })
         }
+        isValid={errors.endereco.numero}
       />
-      {errors.endereco.numero && <label>{errors.endereco.numero}</label>}
       <InputFieldComponent
         htmlFor="complement"
         type="text"
@@ -92,10 +99,8 @@ export const ThirdStep = () => {
         onChange={(e) =>
           setUser({ ...user, endereco: { ...user.endereco, complemento: e } })
         }
+        isValid={errors.endereco.complemento}
       />
-      {errors.endereco.complemento && (
-        <label>{errors.endereco.complemento}</label>
-      )}
       <InputFieldComponent
         htmlFor="neighborhood"
         type="text"
@@ -108,8 +113,8 @@ export const ThirdStep = () => {
         onChange={(e) =>
           setUser({ ...user, endereco: { ...user.endereco, bairro: e } })
         }
+        isValid={errors.endereco.bairro}
       />
-      {errors.endereco.bairro && <label>{errors.endereco.bairro}</label>}
       <InputFieldComponent
         htmlFor="city"
         type="text"
@@ -122,8 +127,8 @@ export const ThirdStep = () => {
         onChange={(e) =>
           setUser({ ...user, endereco: { ...user.endereco, cidade: e } })
         }
+        isValid={errors.endereco.cidade}
       />
-      {errors.endereco.cidade && <label>{errors.endereco.cidade}</label>}
       <InputFieldComponent
         htmlFor="state"
         type="text"
@@ -136,8 +141,8 @@ export const ThirdStep = () => {
         onChange={(e) =>
           setUser({ ...user, endereco: { ...user.endereco, estado: e } })
         }
+        isValid={errors.endereco.estado}
       />
-      {errors.endereco.estado && <label>{errors.endereco.estado}</label>}
     </div>
   );
 };

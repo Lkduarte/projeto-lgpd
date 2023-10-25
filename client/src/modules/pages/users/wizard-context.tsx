@@ -1,92 +1,38 @@
-import React, { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { ITermo } from "../../../utils/interfaces";
+import termoController from "../../../services/controllers/termoController";
 import {
-  ITermo,
-  IUserRegister,
-  IUserValidation,
-} from "../../../utils/interfaces";
-
-interface WizardProps {
-  user: IUserRegister;
-  step: WizardSteps;
-  errors: IUserValidation;
-  termo: ITermo;
-  setErrors: (e: IUserValidation) => void;
-  setStep: (e: WizardSteps) => void;
-  setUser: (e: IUserRegister) => void;
-  nextStep: () => void;
-  backStep: () => void;
-  finish: () => void;
-}
-
-enum WizardSteps {
-  first_module = 1,
-  second_module = 2,
-  third_module = 3,
-}
-
-const defaultUser: IUserRegister = {
-  email: "",
-  password: "",
-  passwordConfirmation: "",
-  nomeCompleto: "",
-  cpf: "",
-  telefone: "",
-  endereco: {
-    cep: "",
-    rua: "",
-    numero: "",
-    complemento: "",
-    bairro: "",
-    cidade: "",
-    estado: "",
-  },
-  permiteReceberEmailInfos: false,
-  permiteReceberEmailPromocoes: false,
-  termo_id: "",
-};
-
-// Objeto initial de validação, quando um campo estiver NULL significa que não há erros vinculados a ele,
-// quando houver alguma string associada, essa string representará a mensagem de erro
-const defaultValidation: IUserValidation = {
-  email: null,
-  password: null,
-  passwordConfirmation: null,
-  nomeCompleto: null,
-  cpf: null,
-  telefone: null,
-  endereco: {
-    cep: null,
-    rua: null,
-    numero: null,
-    complemento: null,
-    bairro: null,
-    cidade: null,
-    estado: null,
-  },
-};
+  WizardProps,
+  WizardSteps,
+  defaultUser,
+  defaultValidation,
+  validateFirstStep,
+} from "./helper";
 
 const WizardContext = createContext({} as WizardProps);
 
 const WizardProvider = ({ children }: any) => {
   const [user, setUser] = useState(defaultUser);
   const [step, setStep] = useState(WizardSteps.first_module);
-  const [errors, setErrors] = useState(defaultValidation);
-  const [termo, setTermo] = useState<ITermo>({} as ITermo);
+  const [errors, setErrors] = useState(defaultValidation());
+  const [termo, setTermo] = useState<ITermo | undefined>();
 
   const finish = () => {
     //VALIDAR CAMPOS
     //ENVIAR DADOS
+    console.log("DAR FETCH");
+    console.log(user);
   };
 
   const nextStep = () => {
     const currentStep = step;
 
     if (currentStep === WizardSteps.first_module) {
-      if (validateStep()) setStep(WizardSteps.second_module);
+      if (validate()) setStep(WizardSteps.second_module);
     } else if (currentStep === WizardSteps.second_module) {
-      if (validateStep()) setStep(WizardSteps.third_module);
+      if (validate()) setStep(WizardSteps.third_module);
     } else if (currentStep === WizardSteps.third_module) {
-      if (validateStep()) finish();
+      if (validate()) finish();
     }
   };
 
@@ -102,41 +48,27 @@ const WizardProvider = ({ children }: any) => {
     }
   };
 
-  const validateStep = () => {
+  const validate = () => {
     const currentStep = step;
 
     if (currentStep === WizardSteps.first_module) {
-      // VALIDAR CAMPOS A PARTIR DO SEGUINTE EXEMPLO:
-
-      return !(
-        errors.nomeCompleto ||
-        errors.email ||
-        errors.password ||
-        errors.passwordConfirmation ||
-        errors.password !== errors.passwordConfirmation
-      );
+      return validateFirstStep(user, errors, setErrors);
     } else if (currentStep === WizardSteps.second_module) {
-      // VALIDAR CAMPOS A PARTIR DO SEGUINTE EXEMPLO:
-
-      return !(
-        errors.endereco.cep ||
-        errors.endereco.rua ||
-        errors.endereco.bairro ||
-        errors.endereco.cidade ||
-        errors.endereco.complemento ||
-        errors.endereco.estado
-      );
+      return user.assinouTermo;
     } else if (currentStep === WizardSteps.third_module) {
-      // VALIDAR CAMPOS A PARTIR DO SEGUINTE EXEMPLO:
-
-      return !(errors.telefone || errors.cpf);
+      return !(errors.cpf || errors.telefone);
+    } else {
+      return true;
     }
+  };
 
-    return true;
+  const loadTermo = async () => {
+    const term = await termoController.getAtual();
+    setTermo(term);
   };
 
   useEffect(() => {
-    //loadTermo();
+    loadTermo();
   }, []);
 
   return (

@@ -1,4 +1,5 @@
 import "./inputFieldStyles.css";
+import InputMask from "react-input-mask";
 
 type props = {
   htmlFor?: string;
@@ -9,6 +10,9 @@ type props = {
   value?: string;
   placeholder?: string;
   idContainer?: string;
+  isValid?: boolean;
+  maxLength?: number;
+  mask?: string;
   onChange?: (t: any) => void;
 };
 
@@ -18,15 +22,53 @@ export const InputFieldComponent = (props: props) => {
       <label htmlFor={props.htmlFor} className="labelInputComponent">
         {props.label}
       </label>
-      <input
-        onChange={(e) => props.onChange && props.onChange(e.target.value)}
-        placeholder={props.placeholder}
-        type={props.type}
-        value={props.value}
-        name={props.name}
-        id={props.id}
-        className="inputField"
-      />
+      {props.mask ? (
+        <InputMask
+          mask={props.mask}
+          onBlur={(e) => {
+            if (props.isValid) {
+              e.target.style.borderColor = "#323232";
+            } else {
+              e.target.style.borderColor = "red";
+            }
+          }}
+          style={{
+            borderColor: props.isValid ? "#323232" : "red",
+          }}
+          onChange={(e) => {
+            props.onChange && props.onChange(e.target.value);
+          }}
+          placeholder={props.placeholder}
+          // type={props.type}
+          value={props.value}
+          name={props.name}
+          id={props.id}
+          className="inputField"
+        />
+      ) : (
+        <input
+          maxLength={props.maxLength}
+          onBlur={(e) => {
+            if (props.isValid) {
+              e.target.style.borderColor = "#323232";
+            } else {
+              e.target.style.borderColor = "red";
+            }
+          }}
+          style={{
+            borderColor: props.isValid ? "#323232" : "red",
+          }}
+          onChange={(e) => {
+            props.onChange && props.onChange(e.target.value);
+          }}
+          placeholder={props.placeholder}
+          type={props.type}
+          value={props.value}
+          name={props.name}
+          id={props.id}
+          className="inputField"
+        />
+      )}
     </div>
   );
 };

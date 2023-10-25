@@ -9,6 +9,7 @@ interface IUserRegister {
   termo_id: string;
   permiteReceberEmailPromocoes: boolean;
   permiteReceberEmailInfos: boolean;
+  assinouTermo: boolean;
 }
 
 interface IEndereco {
@@ -27,23 +28,23 @@ interface ITermo {
 }
 
 interface IUserValidation {
-  email: string | null;
-  password: string | null;
-  passwordConfirmation: string | null;
-  nomeCompleto: string | null;
-  cpf: string | null;
-  telefone: string | null;
+  email: boolean;
+  password: boolean;
+  passwordConfirmation: boolean;
+  nomeCompleto: boolean;
+  cpf: boolean;
+  telefone: boolean;
   endereco: IEnderecoValidation;
 }
 
 interface IEnderecoValidation {
-  cep: string | null;
-  rua: string | null;
-  numero: string | null;
-  complemento: string | null;
-  bairro: string | null;
-  cidade: string | null;
-  estado: string | null;
+  cep: boolean;
+  rua: boolean;
+  numero: boolean;
+  complemento: boolean;
+  bairro: boolean;
+  cidade: boolean;
+  estado: boolean;
 }
 
 export type { IUserRegister, IEndereco, IUserValidation, ITermo };

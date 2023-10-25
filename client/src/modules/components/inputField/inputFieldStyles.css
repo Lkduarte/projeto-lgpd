@@ -6,7 +6,8 @@
 }
 
 .inputField {
-  border: 1px solid #323232;
+  border: 1px solid;
+  /* border-color: #323232; */
   background-color: #545353;
   border-radius: 4px;
   outline: none;
