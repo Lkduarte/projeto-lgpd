@@ -1,12 +1,15 @@
 import { useContext } from "react";
 import { InputFieldComponent } from "../../../components/inputField/inputFieldComponent";
 import { WizardContext } from "../wizard-context";
+import {
+  validateEmail,
+  validateName,
+  validatePassword,
+  validatePasswordConfirmation,
+} from "../helper";
 
 export const FirstStep = () => {
-  const { setUser, user, errors } = useContext(WizardContext);
-
-  // Esse componente é de exemplo com os inputs já aplicados com value relacionado
-  // ao user e também uma demonstração de exibição de mensagens de erro
+  const { setUser, setErrors, user, errors } = useContext(WizardContext);
 
   return (
     <div className="wizardContainerFS">
@@ -18,9 +21,12 @@ export const FirstStep = () => {
         label="Nome Completo*"
         placeholder="Nome"
         value={user.nomeCompleto}
-        onChange={(e) => setUser({ ...user, nomeCompleto: e })}
+        onChange={(e) => {
+          validateName(e, errors, setErrors);
+          setUser({ ...user, nomeCompleto: e });
+        }}
+        isValid={errors.nomeCompleto}
       />
-      {errors.nomeCompleto && <label>{errors.nomeCompleto}</label>}
       <InputFieldComponent
         htmlFor="userEmail"
         type="text"
@@ -29,9 +35,12 @@ export const FirstStep = () => {
         label="E-mail *"
         placeholder="E-mail"
         value={user.email}
-        onChange={(e) => setUser({ ...user, email: e })}
+        onChange={(e) => {
+          validateEmail(e, errors, setErrors);
+          setUser({ ...user, email: e });
+        }}
+        isValid={errors.email}
       />
-      {errors.email && <label>{errors.email}</label>}
       <InputFieldComponent
         htmlFor="password"
         type="password"
@@ -40,9 +49,12 @@ export const FirstStep = () => {
         label="Senha *"
         placeholder="Senha"
         value={user.password}
-        onChange={(e) => setUser({ ...user, password: e })}
+        onChange={(e) => {
+          validatePassword(e, errors, setErrors);
+          setUser({ ...user, password: e });
+        }}
+        isValid={errors.password}
       />
-      {errors.password && <label>{errors.password}</label>}
       <InputFieldComponent
         htmlFor="passwordConfirmation"
         type="password"
@@ -51,11 +63,12 @@ export const FirstStep = () => {
         label="Confirmação de Senha *"
         placeholder="Confirmação de Senha"
         value={user.passwordConfirmation}
-        onChange={(e) => setUser({ ...user, passwordConfirmation: e })}
+        onChange={(e) => {
+          validatePasswordConfirmation(e, user.password, errors, setErrors);
+          setUser({ ...user, passwordConfirmation: e });
+        }}
+        isValid={errors.passwordConfirmation}
       />
-      {errors.passwordConfirmation && (
-        <label>{errors.passwordConfirmation}</label>
-      )}
     </div>
   );
 };

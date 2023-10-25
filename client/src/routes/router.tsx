@@ -32,7 +32,6 @@ export const Router = () => {
               </Private>
             }
           />
-          ?
           <Route path="/login" element={<Login />} />
           <Route
             path="/home"

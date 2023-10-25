@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const alert = useAlert();
-  let interval: any;
 
   const updateUser = (user: any) => {
     setUser(user);
@@ -23,58 +22,37 @@ export const AuthProvider = ({ children }: any) => {
     const recoveredUser = localStorage.getItem("user");
     const recoveredToken = localStorage.getItem("token");
 
-    if (recoveredUser && recoveredToken) {
+    if (!recoveredToken || !recoveredUser) {
+      setLoading(false);
+      navigate("/login");
+      return;
+    }
+
+    try {
+      // const response = await verifyToken(recoveredToken);
+
+      // setUser(response.data.user);
+      // localStorage.setItem("user", JSON.stringify(response.data.user));
       setUser(JSON.parse(recoveredUser));
-      //   try {
-      //     const response = await verifyToken(recoveredToken);
+      setLoading(false);
 
-      //     setUser(response.data.user);
-      //     localStorage.setItem("user", JSON.stringify(response.data.user));
-      //     api.defaults.headers.Authorization = `Bearer ${recoveredToken}`;
-      //     api.defaults.headers.common = {
-      //       Authorization: `Bearer ${recoveredToken}`,
-      //     };
-      //     api.defaults.withCredentials = true;
+      api.defaults.headers.Authorization = `Bearer ${recoveredToken}`;
+      api.defaults.headers.common = {
+        Authorization: `Bearer ${recoveredToken}`,
+      };
+    } catch (e) {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
 
-      //     setLoading(false);
-      //     return true;
-      //   } catch (e) {
-      //     localStorage.removeItem("user");
-      //     localStorage.removeItem("token");
+      setUser(null);
+      setLoading(false);
 
-      //     api.defaults.headers.Authorization = null;
-      //     api.defaults.headers.common = { Authorization: `` };
-      //     api.defaults.withCredentials = false;
-
-      //     setUser(null);
-
-      //     navigate("/login");
-
-      //     setLoading(false);
-      //     return false;
-      //   }
+      navigate("/login");
     }
-
-    if (interval) {
-      clearInterval(interval);
-      interval = null;
-    }
-
-    setLoading(false);
-    return false;
-  };
-
-  const createInterval = () => {
-    interval = setInterval(async () => {
-      await loadCookies();
-    }, 10000);
   };
 
   const carregar = async () => {
-    const response = await loadCookies();
-    if (response) {
-      createInterval();
-    }
+    await loadCookies();
   };
 
   useEffect(() => {
@@ -92,14 +70,11 @@ export const AuthProvider = ({ children }: any) => {
 
       api.defaults.headers.Authorization = `Bearer ${token}`;
       api.defaults.headers.common = { Authorization: `Bearer ${token}` };
-      api.defaults.withCredentials = true;
 
       setUser(loggedUser);
       setLoading(false);
 
       navigate("/home");
-
-      createInterval();
     } catch (e: any) {
       console.log(e);
       const responseMessage = e.response.data;
@@ -126,16 +101,10 @@ export const AuthProvider = ({ children }: any) => {
 
     api.defaults.headers.Authorization = null;
     api.defaults.headers.common = { Authorization: `` };
-    api.defaults.withCredentials = false;
 
     setUser(null);
 
     navigate("/login");
-
-    if (interval) {
-      clearInterval(interval);
-      interval = null;
-    }
   };
 
   return (
