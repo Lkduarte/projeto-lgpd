@@ -55,7 +55,7 @@
   padding: 10px 0;
   border: none;
   border-radius: 5px;
-  color: #FFF;
+  color: #fff;
   cursor: pointer;
   width: 100%;
 }
@@ -64,7 +64,7 @@
   background-color: #4fb4bc;
 }
 
-.cancelButton{
+.cancelButton {
   background-color: #6f6a6a;
 }
 
@@ -87,7 +87,7 @@
   padding: 5px;
 }
 
-#userName {
+#nameField {
   width: 100%;
 }
 

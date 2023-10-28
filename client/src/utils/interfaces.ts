@@ -1,50 +1,60 @@
-interface IUserRegister {
+interface IUser {
+  _id: string | undefined | null;
   email: string;
   password: string;
   passwordConfirmation: string;
-  nomeCompleto: string;
+  data: IUserData;
+  signedTerms: ISignedTerm[];
+}
+
+interface IUserData {
+  name: string;
+  lastName: string;
   cpf: string;
-  telefone: string;
-  endereco: IEndereco;
-  termo_id: string;
-  permiteReceberEmailPromocoes: boolean;
-  permiteReceberEmailInfos: boolean;
-  assinouTermo: boolean;
+  phone: string;
+  address: IAddress;
 }
 
-interface IEndereco {
+interface IAddress {
   cep: string;
-  rua: string;
-  numero: string;
-  complemento: string;
-  bairro: string;
-  cidade: string;
-  estado: string;
+  street: string;
+  number: string;
+  complement: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  country: string;
 }
 
-interface ITermo {
-  termo_id: string;
-  nomeTermo: string;
+interface ISignedTerm {
+  termId: string;
+  isAccepted: boolean;
+  date: Date;
+  signedOptions: ISignedOption[];
 }
 
-interface IUserValidation {
-  email: boolean;
-  password: boolean;
-  passwordConfirmation: boolean;
-  nomeCompleto: boolean;
-  cpf: boolean;
-  telefone: boolean;
-  endereco: IEnderecoValidation;
+interface ISignedOption {
+  optionId: string;
+  isAccepted: boolean;
 }
 
-interface IEnderecoValidation {
-  cep: boolean;
-  rua: boolean;
-  numero: boolean;
-  complemento: boolean;
-  bairro: boolean;
-  cidade: boolean;
-  estado: boolean;
+interface ITerm {
+  _id: string;
+  description: string;
+  options: IOption[];
 }
 
-export type { IUserRegister, IEndereco, IUserValidation, ITermo };
+interface IOption {
+  _id: string;
+  description: string;
+}
+
+export type {
+  IAddress,
+  IOption,
+  ISignedOption,
+  ISignedTerm,
+  ITerm,
+  IUserData,
+  IUser,
+};

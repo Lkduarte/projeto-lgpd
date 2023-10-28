@@ -2,7 +2,11 @@ import "./userStyles.css";
 import "../global.css";
 import { useContext } from "react";
 import { FirstStep } from "./steps/first-step";
-import { WizardContext, WizardProvider, WizardSteps } from "./wizard-context";
+import {
+  WizardContext,
+  WizardProvider,
+  WizardSteps,
+} from "../../../contexts/wizard-context";
 import { SecondStep } from "./steps/second-step";
 import { ThirdStep } from "./steps/third-step";
 
@@ -16,7 +20,9 @@ export const UserRegister: React.FC = () => {
       {step === WizardSteps.third_module && <ThirdStep />}
       <div className="buttonContainer">
         {step !== WizardSteps.first_module && (
-          <button className="wizardButtons" onClick={backStep}>Voltar</button>
+          <button className="wizardButtons" onClick={backStep}>
+            Voltar
+          </button>
         )}
         <button className="wizardButtons" onClick={nextStep}>
           {step === WizardSteps.third_module ? "Finalizar" : "Continuar"}

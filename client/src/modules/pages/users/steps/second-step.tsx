@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { WizardContext } from "../wizard-context";
+import { WizardContext } from "../../../../contexts/wizard-context";
 
 export const SecondStep = () => {
-  const { setUser, user, termo } = useContext(WizardContext);
+  const { setFieldValue, user, term } = useContext(WizardContext);
 
   return (
     <div className="wizardContainerSS">
@@ -11,33 +11,47 @@ export const SecondStep = () => {
         id="userTermo"
         cols={30}
         rows={10}
-        value={termo ? termo.nomeTermo : ""}
+        value={term ? term.description : ""}
         disabled={true}
       ></textarea>
-      <div className="checkboxContainer">
-        <input
-          className="checkbox"
-          id="termoTitle"
-          type="checkbox"
-          checked={user.assinouTermo}
-          onChange={(e) => setUser({ ...user, assinouTermo: e.target.checked })}
-        />
-        <label htmlFor="termoTitle">Declaro que li e aceito os termos</label>
-      </div>
-      <div className="checkboxContainer">
-        <input
-          className="checkbox"
-          id="promoTitle"
-          type="checkbox"
-          checked={user.permiteReceberEmailPromocoes}
-          onChange={(e) =>
-            setUser({ ...user, permiteReceberEmailPromocoes: e.target.checked })
-          }
-        />
-        <label htmlFor="promoTitle">
-          Aceito receber promoções em meu e-mail
-        </label>
-      </div>
+      {term && (
+        <div className="checkboxContainer">
+          <input
+            className="checkbox"
+            id="promoTitle"
+            type="checkbox"
+            checked={user.signedTerms[0].isAccepted}
+            onChange={(e) =>
+              setFieldValue(`signedTerms.0.isAccepted`, e.target.checked)
+            }
+          />
+          <label htmlFor="promoTitle">
+            Ao confirmar você confirma que leu e ACEITOU os termos acima.
+          </label>
+        </div>
+      )}
+      {term &&
+        term.options.map((option, index) => (
+          <div className="checkboxContainer" key={option._id}>
+            <input
+              className="checkbox"
+              id={`promoTitle_${index}`}
+              type="checkbox"
+              checked={
+                user.signedTerms[0].signedOptions.filter(
+                  (x) => x.optionId === option._id
+                )[0].isAccepted
+              }
+              onChange={(e) => {
+                setFieldValue(
+                  `signedTerms.0.signedOptions.${index}.isAccepted`,
+                  e.target.checked
+                );
+              }}
+            />
+            <label htmlFor={`promoTitle_${index}`}>{option.description}</label>
+          </div>
+        ))}
     </div>
   );
 };

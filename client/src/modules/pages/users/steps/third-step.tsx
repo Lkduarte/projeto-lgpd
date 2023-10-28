@@ -1,10 +1,9 @@
 import { useContext } from "react";
 import { InputFieldComponent } from "../../../components/inputField/inputFieldComponent";
-import { WizardContext } from "../wizard-context";
-import { validateCpf, validateTelefone } from "../helper";
+import { WizardContext } from "../../../../contexts/wizard-context";
 
 export const ThirdStep = () => {
-  const { setUser, user, errors, setErrors } = useContext(WizardContext);
+  const { setFieldValue, user, errors, formik } = useContext(WizardContext);
 
   return (
     <div className="wizardContainerFS">
@@ -14,16 +13,17 @@ export const ThirdStep = () => {
         name="userDocument"
         id="document"
         idContainer="userDocument"
-        label="Documento *"
-        placeholder="Documento"
+        label="CPF *"
+        placeholder="CPF"
         maxLength={14}
         mask="999.999.999-99"
-        value={user.cpf}
+        value={user.data.cpf}
         onChange={(e) => {
-          validateCpf(e, errors, setErrors);
-          setUser({ ...user, cpf: e });
+          setFieldValue("data.cpf", e);
         }}
-        isValid={errors.cpf}
+        isValid={
+          formik.status === "VALIDO" ? true : !(errors.data && errors.data.cpf)
+        }
       />
       <InputFieldComponent
         htmlFor="phone"
@@ -35,12 +35,15 @@ export const ThirdStep = () => {
         maxLength={15}
         placeholder="Telefone"
         mask={"(99) 99999-9999"}
-        value={user.telefone}
+        value={user.data.phone}
         onChange={(e) => {
-          validateTelefone(e, errors, setErrors);
-          setUser({ ...user, telefone: e });
+          setFieldValue("data.phone", e);
         }}
-        isValid={errors.telefone}
+        isValid={
+          formik.status === "VALIDO"
+            ? true
+            : !(errors.data && errors.data.phone)
+        }
       />
       <InputFieldComponent
         htmlFor="zipCode"
@@ -50,11 +53,15 @@ export const ThirdStep = () => {
         idContainer="userZipCode"
         label="CEP"
         placeholder="CEP"
-        value={user.endereco.cep}
+        value={user.data.address.cep}
         onChange={(e) => {
-          setUser({ ...user, endereco: { ...user.endereco, cep: e } });
+          setFieldValue("data.address.cep", e);
         }}
-        isValid={errors.endereco.cep}
+        isValid={
+          formik.status === "VALIDO"
+            ? true
+            : !(errors.data && errors.data.address && errors.data.address.cep)
+        }
       />
       <InputFieldComponent
         htmlFor="street"
@@ -64,11 +71,19 @@ export const ThirdStep = () => {
         idContainer="userStreet"
         label="Rua/Avenida"
         placeholder="Rua/Avenida"
-        value={user.endereco.rua}
-        onChange={(e) =>
-          setUser({ ...user, endereco: { ...user.endereco, rua: e } })
+        value={user.data.address.street}
+        onChange={(e) => {
+          setFieldValue("data.address.street", e);
+        }}
+        isValid={
+          formik.status === "VALIDO"
+            ? true
+            : !(
+                errors.data &&
+                errors.data.address &&
+                errors.data.address.street
+              )
         }
-        isValid={errors.endereco.rua}
       />
       <InputFieldComponent
         htmlFor="number"
@@ -78,11 +93,19 @@ export const ThirdStep = () => {
         id="number"
         label="Número"
         placeholder="Número"
-        value={user.endereco.numero}
-        onChange={(e) =>
-          setUser({ ...user, endereco: { ...user.endereco, numero: e } })
+        value={user.data.address.number}
+        onChange={(e) => {
+          setFieldValue("data.address.number", e);
+        }}
+        isValid={
+          formik.status === "VALIDO"
+            ? true
+            : !(
+                errors.data &&
+                errors.data.address &&
+                errors.data.address.number
+              )
         }
-        isValid={errors.endereco.numero}
       />
       <InputFieldComponent
         htmlFor="complement"
@@ -92,11 +115,19 @@ export const ThirdStep = () => {
         idContainer="userComplement"
         label="Complemento"
         placeholder="Complemento"
-        value={user.endereco.complemento}
-        onChange={(e) =>
-          setUser({ ...user, endereco: { ...user.endereco, complemento: e } })
+        value={user.data.address.complement}
+        onChange={(e) => {
+          setFieldValue("data.address.complement", e);
+        }}
+        isValid={
+          formik.status === "VALIDO"
+            ? true
+            : !(
+                errors.data &&
+                errors.data.address &&
+                errors.data.address.complement
+              )
         }
-        isValid={errors.endereco.complemento}
       />
       <InputFieldComponent
         htmlFor="neighborhood"
@@ -106,11 +137,19 @@ export const ThirdStep = () => {
         idContainer="userNeighborhood"
         label="Bairro"
         placeholder="Bairro"
-        value={user.endereco.bairro}
-        onChange={(e) =>
-          setUser({ ...user, endereco: { ...user.endereco, bairro: e } })
+        value={user.data.address.neighborhood}
+        onChange={(e) => {
+          setFieldValue("data.address.neighborhood", e);
+        }}
+        isValid={
+          formik.status === "VALIDO"
+            ? true
+            : !(
+                errors.data &&
+                errors.data.address &&
+                errors.data.address.neighborhood
+              )
         }
-        isValid={errors.endereco.bairro}
       />
       <InputFieldComponent
         htmlFor="city"
@@ -120,11 +159,15 @@ export const ThirdStep = () => {
         idContainer="userCity"
         label="Cidade"
         placeholder="Cidade"
-        value={user.endereco.cidade}
-        onChange={(e) =>
-          setUser({ ...user, endereco: { ...user.endereco, cidade: e } })
+        value={user.data.address.city}
+        onChange={(e) => {
+          setFieldValue("data.address.city", e);
+        }}
+        isValid={
+          formik.status === "VALIDO"
+            ? true
+            : !(errors.data && errors.data.address && errors.data.address.city)
         }
-        isValid={errors.endereco.cidade}
       />
       <InputFieldComponent
         htmlFor="state"
@@ -134,11 +177,15 @@ export const ThirdStep = () => {
         idContainer="userState"
         label="Estado"
         placeholder="Estado"
-        value={user.endereco.estado}
-        onChange={(e) =>
-          setUser({ ...user, endereco: { ...user.endereco, estado: e } })
+        value={user.data.address.state}
+        onChange={(e) => {
+          setFieldValue("data.address.state", e);
+        }}
+        isValid={
+          formik.status === "VALIDO"
+            ? true
+            : !(errors.data && errors.data.address && errors.data.address.state)
         }
-        isValid={errors.endereco.estado}
       />
     </div>
   );
