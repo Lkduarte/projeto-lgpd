@@ -24,23 +24,17 @@ export const Router = () => {
 
   return (
     <BrowserRouter>
-      <AuthProvider>
+      {/* <AuthProvider> */}
         <Routes>
-          <Route
-            index
-            element={
-              <Private>
-                <Navigate to="/home" />
-              </Private>
-            }
-          />
+          {/* <Route index element={<Navigate to="/home" />} /> */}
+          <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/home" element={<Home />}/>
+          <Route path="/home" element={<Home />} />
           <Route path="/userRegister" element={<UserRegisterPage />} />
           <Route path="/userEdit" element={<UserEdit />} />
           <Route path="/editConfirm" element={<EditConfirm />} />
         </Routes>
-      </AuthProvider>
+      {/* </AuthProvider> */}
     </BrowserRouter>
   );
 };
