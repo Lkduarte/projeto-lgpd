@@ -1,4 +1,3 @@
-import { IUserRegister } from "../../utils/interfaces";
 import { RequestMethods, request } from "../api";
 
 class AuthControler {
@@ -8,9 +7,13 @@ class AuthControler {
     return { user: { name: "teste" }, token: "aaaaaaa" };
   }
 
-  async register(data: IUserRegister) {
+  async register(data: any) {
     try {
-      const response = await request(RequestMethods.POST, "/register", data);
+      const response = await request(
+        RequestMethods.POST,
+        "/usuario/create",
+        data
+      );
 
       return response.data;
     } catch (e) {

@@ -1,31 +1,43 @@
 import { useContext } from "react";
 import { InputFieldComponent } from "../../../components/inputField/inputFieldComponent";
-import { WizardContext } from "../wizard-context";
-import {
-  validateEmail,
-  validateName,
-  validatePassword,
-  validatePasswordConfirmation,
-} from "../helper";
+import { WizardContext } from "../../../../contexts/wizard-context";
 
 export const FirstStep = () => {
-  const { setUser, setErrors, user, errors } = useContext(WizardContext);
+  const { user, errors, setFieldValue, formik } = useContext(WizardContext);
 
   return (
     <div className="wizardContainerFS">
       <InputFieldComponent
-        name="userName"
-        idContainer="userName"
+        name="nomeUsuario"
+        idContainer="nameField"
         type="text"
-        htmlFor="userName"
-        label="Nome Completo*"
+        htmlFor="nomeUsuario"
+        label="Nome*"
         placeholder="Nome"
-        value={user.nomeCompleto}
+        value={user.data.name}
         onChange={(e) => {
-          validateName(e, errors, setErrors);
-          setUser({ ...user, nomeCompleto: e });
+          setFieldValue("data.name", e);
         }}
-        isValid={errors.nomeCompleto}
+        isValid={
+          formik.status === "VALIDO" ? true : !(errors.data && errors.data.name)
+        }
+      />
+      <InputFieldComponent
+        name="sobrenomeUsuario"
+        idContainer="nameField"
+        type="text"
+        htmlFor="sobrenomeUsuario"
+        label="Sobrenome*"
+        placeholder="Sobrenome"
+        value={user.data.lastName}
+        onChange={(e) => {
+          setFieldValue("data.lastName", e);
+        }}
+        isValid={
+          formik.status === "VALIDO"
+            ? true
+            : !(errors.data && errors.data.lastName)
+        }
       />
       <InputFieldComponent
         htmlFor="userEmail"
@@ -36,10 +48,9 @@ export const FirstStep = () => {
         placeholder="E-mail"
         value={user.email}
         onChange={(e) => {
-          validateEmail(e, errors, setErrors);
-          setUser({ ...user, email: e });
+          setFieldValue("email", e);
         }}
-        isValid={errors.email}
+        isValid={formik.status === "VALIDO" ? true : !errors.email}
       />
       <InputFieldComponent
         htmlFor="password"
@@ -50,10 +61,9 @@ export const FirstStep = () => {
         placeholder="Senha"
         value={user.password}
         onChange={(e) => {
-          validatePassword(e, errors, setErrors);
-          setUser({ ...user, password: e });
+          setFieldValue("password", e);
         }}
-        isValid={errors.password}
+        isValid={formik.status === "VALIDO" ? true : !errors.password}
       />
       <InputFieldComponent
         htmlFor="passwordConfirmation"
@@ -64,10 +74,11 @@ export const FirstStep = () => {
         placeholder="Confirmação de Senha"
         value={user.passwordConfirmation}
         onChange={(e) => {
-          validatePasswordConfirmation(e, user.password, errors, setErrors);
-          setUser({ ...user, passwordConfirmation: e });
+          setFieldValue("passwordConfirmation", e);
         }}
-        isValid={errors.passwordConfirmation}
+        isValid={
+          formik.status === "VALIDO" ? true : !errors.passwordConfirmation
+        }
       />
     </div>
   );
