@@ -56,6 +56,7 @@ export const InputFieldComponent = (props: props) => {
             } else {
               e.target.style.borderColor = "red";
             }
+            if (props.onBlur) props.onBlur();
           }}
           style={{
             borderColor: props.isValid ? "#323232" : "red",
