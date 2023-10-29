@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { InputFieldComponent } from "../../components/inputField/inputFieldComponent";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../contexts/auth-context";
 
 export const UserEdit = () => {
 
     const navigate = useNavigate();
-    const [user, setUser,] = useState();
+    const {user} = useContext(AuthContext);
+
 
     return (
         <div className="editContainer">
@@ -14,9 +16,21 @@ export const UserEdit = () => {
                     name="userName"
                     idContainer="userName"
                     type="text"
-                    htmlFor="userName"
-                    label="Nome Completo*"
+                    id="nome"
+                    htmlFor="nome"
+                    label="Nome *"
                     placeholder="Nome"
+                    value=""
+                />
+                <InputFieldComponent
+                    name="lastName"
+                    idContainer="lastName"
+                    type="text"
+                    id="sobrenome"
+                    htmlFor="sobrenome"
+                    label="Sobrenome *"
+                    placeholder="Sobrenome"
+                    value=""
                 />
                 <InputFieldComponent
                     htmlFor="document"
