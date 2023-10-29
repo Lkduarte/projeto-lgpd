@@ -8,6 +8,7 @@ import {
   createUser,
 } from "../services/userServices";
 import { authentication, random } from "../helpers";
+import { getCurrentTerm } from "services/termServices";
 
 export const getAllUsers = async (
   req: express.Request,
@@ -141,6 +142,38 @@ export const updateUser = async (
     await user.save();
 
     return res.status(200).json(user).end();
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: "An error occurred when tried to update user",
+    });
+  }
+};
+
+export const hasSignedCurrentTerm = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { id } = req.params;
+
+    const user = await getUserById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const currentTerm = await getCurrentTerm();
+
+    if (!currentTerm) {
+      return res.status(404).json({ message: "Term not found" });
+    }
+
+    if (!user.signedTerms.filter((x) => x.termId === currentTerm._id)) {
+      return res.status(200).json(currentTerm);
+    }
+
+    return res.status(200).json(null).end();
   } catch (error) {
     console.log(error);
     return res.status(400).json({
