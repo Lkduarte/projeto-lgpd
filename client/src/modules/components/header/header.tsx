@@ -1,12 +1,19 @@
-import { useNavigate } from 'react-router-dom';
-import './headerStyles.css'
+import { useNavigate } from "react-router-dom";
+import "./headerStyles.css";
+import { useContext } from "react";
+import { AuthContext } from "../../../contexts/auth-context";
 
 function Header() {
   const navigate = useNavigate();
+  const { authenticated, logout } = useContext(AuthContext);
+
   return (
     <header>
       <div className="logo">
-        <img src="https://cdn-icons-png.flaticon.com/512/4151/4151857.png" alt="Logo do Site Fictício" />
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/4151/4151857.png"
+          alt="Logo do Site Fictício"
+        />
         <p>Loja de celular</p>
       </div>
       <div className="rightSide">
@@ -14,8 +21,19 @@ function Header() {
           <button>Meu Carrinho</button>
         </div>
         <div className="userActions">
-          <button onClick={() => navigate('/login')}>Fazer Login</button>
-          <button onClick={() => navigate('/userRegister')}>Inscrever-se</button>
+          {authenticated ? (
+            <>
+              <button onClick={() => navigate("/userEdit")}>Meu perfil</button>
+              <button onClick={logout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <button onClick={() => navigate("/login")}>Fazer Login</button>
+              <button onClick={() => navigate("/userRegister")}>
+                Inscrever-se
+              </button>
+            </>
+          )}
         </div>
       </div>
     </header>

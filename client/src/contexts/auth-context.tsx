@@ -1,89 +1,48 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, createContext, useState } from "react";
+import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import useAlert from "../utils/alerts";
 import authController from "../services/controllers/authController";
+import { IUser } from "../utils/interfaces";
 
-export const AuthContext = createContext({} as any);
+interface AuthContextProps {
+  authenticated: boolean;
+  user: IUser | null;
+  loading: boolean;
+  login: (x: string, y: string) => void;
+  logout: () => void;
+  updateUser: (x: IUser) => void;
+}
+
+export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: any) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState(true);
   const alert = useAlert();
-
-  const updateUser = (user: any) => {
-    setUser(user);
-    localStorage.setItem("user", JSON.stringify(user));
-  };
-
-  const loadCookies = async () => {
-    const recoveredUser = localStorage.getItem("user");
-    const recoveredToken = localStorage.getItem("token");
-
-    if (!recoveredToken || !recoveredUser) {
-      setLoading(false);
-      navigate("/login");
-      return;
-    }
-
-    try {
-      // const response = await verifyToken(recoveredToken);
-
-      // setUser(response.data.user);
-      // localStorage.setItem("user", JSON.stringify(response.data.user));
-      setUser(JSON.parse(recoveredUser));
-      setLoading(false);
-
-      api.defaults.headers.Authorization = `Bearer ${recoveredToken}`;
-      api.defaults.headers.common = {
-        Authorization: `Bearer ${recoveredToken}`,
-      };
-    } catch (e) {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-
-      setUser(null);
-      setLoading(false);
-
-      navigate("/login");
-    }
-  };
-
-  const carregar = async () => {
-    await loadCookies();
-  };
-
-  useEffect(() => {
-    carregar();
-  }, []);
 
   const login = async (email: string, password: string) => {
     try {
       const response = await authController.login(email, password);
-      const loggedUser = response.user;
-      const token = response.token;
+      const loggedUser = response.data;
 
-      localStorage.setItem("user", JSON.stringify(loggedUser));
-      localStorage.setItem("token", token);
-
-      api.defaults.headers.Authorization = `Bearer ${token}`;
-      api.defaults.headers.common = { Authorization: `Bearer ${token}` };
+      api.defaults.headers.common["Cookie"] = document.cookie;
 
       setUser(loggedUser);
       setLoading(false);
 
       navigate("/home");
     } catch (e: any) {
-      console.log(e);
-      const responseMessage = e.response.data;
+      const responseMessage = e.response.data.message;
       let errorMessage;
 
-      if (responseMessage.includes("Email not found")) {
-        errorMessage = "E-mail ou senha inválidos.";
-      } else if (responseMessage.includes("Incorrect password")) {
-        errorMessage = "E-mail ou senha inválidos.";
+      if (
+        responseMessage.includes("User unauth") ||
+        responseMessage.includes("user not found for this email")
+      ) {
+        errorMessage = "Email ou senha incorreto(a).";
       } else {
         errorMessage = responseMessage;
       }
@@ -96,12 +55,7 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-
-    api.defaults.headers.Authorization = null;
-    api.defaults.headers.common = { Authorization: `` };
-
+    api.defaults.headers.common["Cookie"] = null;
     setUser(null);
 
     navigate("/login");
@@ -115,7 +69,7 @@ export const AuthProvider = ({ children }: any) => {
         loading,
         login,
         logout,
-        updateUser,
+        updateUser: setUser,
       }}
     >
       {children}

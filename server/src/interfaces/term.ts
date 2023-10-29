@@ -4,6 +4,8 @@ export default interface Term {
   _id: string;
   description: string;
   options: Option[];
+  date: Date;
+  isActual: boolean;
 }
 
 export interface Option {

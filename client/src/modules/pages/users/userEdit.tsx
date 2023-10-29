@@ -88,54 +88,58 @@ export const UserEdit = () => {
                     placeholder="Complemento"
                 />
 
-                <InputFieldComponent
-                    htmlFor="neighborhood"
-                    type="text"
-                    name="userNeighborhood"
-                    id="neighborhood"
-                    idContainer="userNeighborhood"
-                    label="Bairro"
-                    placeholder="Bairro"
-
-                />
-                <InputFieldComponent
-                    htmlFor="city"
-                    type="text"
-                    name="userCity"
-                    id="city"
-                    idContainer="userCity"
-                    label="Cidade"
-                    placeholder="Cidade"
-
-                />
-                <InputFieldComponent
-                    htmlFor="state"
-                    type="text"
-                    name="userState"
-                    id="state"
-                    idContainer="userState"
-                    label="Estado"
-                    placeholder="Estado"
-
-                />
-                <InputFieldComponent
-                    htmlFor="userEmail"
-                    type="text"
-                    name="userEmail"
-                    idContainer="userEmail"
-                    label="E-mail *"
-                    placeholder="E-mail"
-                />
-                <div className='editButtonContainer'>
-                    <button onClick={() => navigate('/home')} type="submit" className='button cancelButton'>
-                        Voltar
-                    </button>
-                    <button onClick={() => navigate('/editConfirm')} type="submit" className='button loginButton'>
-                        Confirmar
-                    </button>
-                </div>
-            </div>
-
+        <InputFieldComponent
+          htmlFor="neighborhood"
+          type="text"
+          name="userNeighborhood"
+          id="neighborhood"
+          idContainer="userNeighborhood"
+          label="Bairro"
+          placeholder="Bairro"
+        />
+        <InputFieldComponent
+          htmlFor="city"
+          type="text"
+          name="userCity"
+          id="city"
+          idContainer="userCity"
+          label="Cidade"
+          placeholder="Cidade"
+        />
+        <InputFieldComponent
+          htmlFor="state"
+          type="text"
+          name="userState"
+          id="state"
+          idContainer="userState"
+          label="Estado"
+          placeholder="Estado"
+        />
+        <InputFieldComponent
+          htmlFor="userEmail"
+          type="text"
+          name="userEmail"
+          idContainer="userEmail"
+          label="E-mail *"
+          placeholder="E-mail"
+        />
+        <div className="editButtonContainer">
+          <button
+            onClick={() => navigate("/home")}
+            type="submit"
+            className="button cancelButton"
+          >
+            Voltar
+          </button>
+          <button
+            onClick={() => navigate("/editConfirm")}
+            type="submit"
+            className="button loginButton"
+          >
+            Confirmar
+          </button>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
