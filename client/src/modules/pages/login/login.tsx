@@ -42,6 +42,7 @@ const Login: React.FC = () => {
   return (
 
     <div className='loginContainer'>
+      <p className="login">Login</p>
       <div className='loginForm'>
         <InputFieldComponent
           label="E-mail"
@@ -66,7 +67,7 @@ const Login: React.FC = () => {
 
         
         <div className='loginButtonContainer'>
-          <button onClick={handleSubmit} type="submit" className='loginButton'>
+          <button onClick={handleSubmit} type="submit" className='confirmButton'>
             Entrar
           </button>
           {/* <button className='linkButton'>

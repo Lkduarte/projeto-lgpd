@@ -13,6 +13,7 @@ type props = {
   isValid?: boolean;
   maxLength?: number;
   mask?: string;
+  onBlur?: () => void;
   onChange?: (t: any) => void;
 };
 
@@ -31,6 +32,7 @@ export const InputFieldComponent = (props: props) => {
             } else {
               e.target.style.borderColor = "red";
             }
+            if (props.onBlur) props.onBlur();
           }}
           style={{
             borderColor: props.isValid ? "#323232" : "red",
@@ -54,6 +56,7 @@ export const InputFieldComponent = (props: props) => {
             } else {
               e.target.style.borderColor = "red";
             }
+            if (props.onBlur) props.onBlur();
           }}
           style={{
             borderColor: props.isValid ? "#323232" : "red",

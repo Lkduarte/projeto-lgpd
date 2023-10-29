@@ -7,18 +7,17 @@
 
 .inputField {
   border: 1px solid;
-  /* border-color: #323232; */
-  background-color: #545353;
+  background-color: #e2e2e2;
   border-radius: 4px;
   outline: none;
   font-size: 14px;
   padding: 10px 10px;
   margin-bottom: 10px;
-  color: #eeeeee;
+  color: #595959;
 }
 
 .labelInputComponent {
-  color: #eeeeee;
+  color: #595959;
   font-size: 16px;
   margin-left: 3px;
 }

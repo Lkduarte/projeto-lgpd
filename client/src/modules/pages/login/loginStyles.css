@@ -3,15 +3,22 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 30px;
-  width: 35%;
+  padding: 10px;
+  width: 25%;
   height: 70%;
-  background-color: #333;
+  border: 1px solid #595959;
+  background-color: #f2f2f2;
   border-radius: 10px;
 }
 
+.login {
+  color: #595959;
+  font-size: 24px;
+  text-align: center;
+}
+
 .loginForm {
-  margin-top: 100px;
+  margin-top: 80px;
   width: 100%;
 }
 
@@ -23,8 +30,8 @@
   width: 100%;
 }
 
-.loginButton {
-  background-color: #4fb4bc;
+.confirmButton {
+  background-color: #595959;
   padding: 10px 0;
   border: none;
   border-radius: 5px;
