@@ -46,5 +46,22 @@ interface IEnderecoValidation {
   cidade: boolean;
   estado: boolean;
 }
+interface Product {
+  id: number;
+  image: string;
+  name: string;
+  description: string;
+  price: string;
+}
+interface ProductProps {
+  product: Product;
+}
 
-export type { IUserRegister, IEndereco, IUserValidation, ITermo };
+export type {
+  IUserRegister,
+  IEndereco,
+  IUserValidation,
+  ITermo,
+  Product,
+  ProductProps,
+};
