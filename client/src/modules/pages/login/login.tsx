@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../contexts/auth-context";
 import useAlert from "../../../utils/alerts";
-import './loginStyles.css'
+import "./loginStyles.css";
 import { InputFieldComponent } from "../../components/inputField/inputFieldComponent";
 
 const Login: React.FC = () => {
@@ -36,23 +36,25 @@ const Login: React.FC = () => {
 
   const handleRegister = (e: any) => {
     e.preventDefault();
-    navigate('/userRegister')
+    navigate("/userRegister");
   };
 
   return (
-
-    <div className='loginContainer'>
+    <div className="loginContainer">
       <p className="login">Login</p>
-      <div className='loginForm'>
+      <div className="loginForm">
         <InputFieldComponent
           label="E-mail"
           htmlFor="email"
           idContainer="loginEmail"
           value={email}
           type="email"
-          onChange={(e) => { setEmail(e.target.value) }}
+          onChange={(e) => {
+            setEmail(e);
+          }}
           id="email"
           name="email"
+          isValid={true}
         />
         <InputFieldComponent
           label="Senha"
@@ -60,20 +62,26 @@ const Login: React.FC = () => {
           idContainer="loginSenha"
           value={password}
           type="password"
-          onChange={(e) => { setPassword(e.target.value) }}
+          onChange={(e) => {
+            setPassword(e);
+          }}
           id="senha"
           name="password"
+          isValid={true}
         />
 
-        
-        <div className='loginButtonContainer'>
-          <button onClick={handleSubmit} type="submit" className='confirmButton'>
+        <div className="loginButtonContainer">
+          <button
+            onClick={handleSubmit}
+            type="submit"
+            className="confirmButton"
+          >
             Entrar
           </button>
           {/* <button className='linkButton'>
             Esqueci minha senha
           </button> */}
-          <button onClick={handleRegister} className='linkButton'>
+          <button onClick={handleRegister} className="linkButton">
             Não possui conta? Cadastre-se
           </button>
         </div>

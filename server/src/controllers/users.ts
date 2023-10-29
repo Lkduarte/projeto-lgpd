@@ -66,11 +66,12 @@ export const getByEmail = async (
 
 export const register = async (req: express.Request, res: express.Response) => {
   try {
-    const { email, password, data } = req.body;
+    const { email, password, data, signedTerms } = req.body;
 
-    if (!email || !password || !data) {
+    if (!email || !password || !data || !signedTerms) {
       return res.status(400).json({
-        message: "email, password and data are required for registration",
+        message:
+          "email, password, signedTerms and data are required for registration",
       });
     }
 
@@ -86,6 +87,7 @@ export const register = async (req: express.Request, res: express.Response) => {
     const user = await createUser({
       email,
       data,
+      signedTerms,
       authentication: {
         salt,
         password: authentication(salt, password),

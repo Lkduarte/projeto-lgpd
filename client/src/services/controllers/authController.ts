@@ -2,16 +2,17 @@ import { RequestMethods, request } from "../api";
 
 class AuthControler {
   async login(email: string, password: string) {
-    // return (await request(RequestMethods.POST, "/login", { email, password }))
-    //   .data;
-    return { user: { name: "teste" }, token: "aaaaaaa" };
+    return await request(RequestMethods.POST, "/auth/login", {
+      email,
+      password,
+    });
   }
 
   async register(data: any) {
     try {
       const response = await request(
         RequestMethods.POST,
-        "/usuario/create",
+        "/user/register",
         data
       );
 

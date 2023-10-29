@@ -34,18 +34,17 @@ const WizardProvider = ({ children }: any) => {
       alert.criarConfirmacao({
         html: "Deseja realmente cadastrar-se no sistema?",
         confirmAction: async () => {
-          console.log(values);
-          // const result = await authController.register(values);
+          const { _id, passwordConfirmation, ...data } = values;
+          const result = await authController.register(data);
 
-          // console.log(result);
-          // alert.criarAlerta({
-          //   html: result.error
-          //     ? "Ocorreu um erro ao cadastrar-se."
-          //     : "Cadastro realizado com sucesso!",
-          //   confirmAction: () => {
-          //     navigate("/login");
-          //   },
-          // });
+          alert.criarAlerta({
+            html: result.error
+              ? "Ocorreu um erro ao cadastrar-se."
+              : "Cadastro realizado com sucesso!",
+            confirmAction: () => {
+              navigate("/login");
+            },
+          });
         },
       });
     },
