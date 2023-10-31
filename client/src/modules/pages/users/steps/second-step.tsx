@@ -6,6 +6,7 @@ export const SecondStep = () => {
 
   return (
     <div className="wizardContainerSS">
+      <h3>Termos de uso e Políticas de privacidade</h3>
       <textarea
         name=""
         id="userTermo"

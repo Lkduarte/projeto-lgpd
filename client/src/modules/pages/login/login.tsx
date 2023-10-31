@@ -39,6 +39,11 @@ const Login: React.FC = () => {
     navigate("/userRegister");
   };
 
+  const handleVoltar = (e: any) => {
+    e.preventDefault();
+    navigate("/home");
+  };
+
   return (
     <div className="loginContainer">
       <p className="login">Login</p>
@@ -83,6 +88,9 @@ const Login: React.FC = () => {
           </button> */}
           <button onClick={handleRegister} className="linkButton">
             Não possui conta? Cadastre-se
+          </button>
+          <button onClick={handleVoltar} className="linkButton">
+            Voltar
           </button>
         </div>
       </div>

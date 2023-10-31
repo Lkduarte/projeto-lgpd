@@ -8,10 +8,11 @@ export const FirstStep = () => {
   return (
     <div className="wizardContainerFS">
       <InputFieldComponent
-        name="nomeUsuario"
-        idContainer="nameField"
+        name="userName"
+        idContainer="userName"
         type="text"
-        htmlFor="nomeUsuario"
+        htmlFor="nome"
+        id="nome"
         label="Nome*"
         placeholder="Nome"
         value={user.data.name}
@@ -23,10 +24,11 @@ export const FirstStep = () => {
         }
       />
       <InputFieldComponent
-        name="sobrenomeUsuario"
-        idContainer="nameField"
+        name="lastName"
+        idContainer="lastName"
         type="text"
-        htmlFor="sobrenomeUsuario"
+        htmlFor="sobrenome"
+        id="sobrenome"
         label="Sobrenome*"
         placeholder="Sobrenome"
         value={user.data.lastName}
