@@ -1,16 +1,26 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import useAlert from "../../../utils/alerts";
 import './userStyles.css'
 import { InputFieldComponent } from "../../components/inputField/inputFieldComponent";
+import userController from "../../../services/controllers/userController";
+
+import { AuthContext } from "../../../contexts/auth-context";
+
 
 export const EditConfirm = () => {
+  const { updateUser } = useContext(AuthContext);
   const navigate = useNavigate();
-
+  const location = useLocation();
   const [password, setPassword] = useState("");
   const alert = useAlert();
 
-  const handleSubmit = (e: any) => {
+  if (!location.state){
+    navigate('/home')
+    return <></>
+  }
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     if (
@@ -20,18 +30,18 @@ export const EditConfirm = () => {
     ) {
       alert.criarAlerta({
         title: "Opss...",
-        html: "E-mail ou senha inválidos.",
+        html: "Senha inválidos.",
       });
       return;
     }
+    const response = await userController.update(location.state.data, location.state._id)
+    console.log(response) 
+    if (!response.error) {
+      updateUser(location.state)
+    }
 
-    // login(email, password);
   };
 
-  const handleRegister = (e: any) => {
-    e.preventDefault();
-    // navigate('/userRegister')
-  };
 
   return (
 
@@ -43,7 +53,7 @@ export const EditConfirm = () => {
           idContainer="loginSenha"
           value={password}
           type="password"
-          onChange={(e) => { setPassword(e.target.value) }}
+          onChange={(e) => {setPassword(e)}}
           id="senha"
           name="password"
         />

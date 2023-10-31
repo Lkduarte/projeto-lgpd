@@ -12,7 +12,7 @@ class UserController {
         const response = await request(
           RequestMethods.PATCH,
           `/user/updateUser/${_id}`,
-          data
+          {data}
         );
   
         return response.data;
