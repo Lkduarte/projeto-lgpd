@@ -6,13 +6,14 @@ import { UserRegisterPage } from "../modules/pages/users/usersRegister";
 import { UserEdit } from "../modules/pages/users/userEdit";
 import EditConfirm from "../modules/pages/users/editConfirm";
 import Home from "../modules/pages/home/home";
+import { TermPage } from "../modules/pages/term/termo";
 
 export const Router = () => {
-  const Private = ({ children }: any) => {
-    const { authenticated, loading } = useContext(AuthContext);
+  const PrivateAuth = ({ children }: any) => {
+    const { authenticated, mustSignTerm } = useContext(AuthContext);
 
-    if (loading) {
-      return <></>;
+    if (mustSignTerm) {
+      return <Navigate to="/currentTerm" />;
     }
 
     if (authenticated) {
@@ -22,28 +23,46 @@ export const Router = () => {
     return <Navigate to="/login" />;
   };
 
+  const PrivateByTerm = ({ children }: any) => {
+    const { mustSignTerm } = useContext(AuthContext);
+
+    if (mustSignTerm) {
+      return <Navigate to="/currentTerm" />;
+    }
+
+    return children;
+  };
+
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
           <Route index element={<Navigate to="/home" />} />
-          <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/userRegister" element={<UserRegisterPage />} />
+          <Route path="/currentTerm" element={<TermPage />} />
+          <Route
+            path="/home"
+            element={
+              <PrivateByTerm>
+                <Home />
+              </PrivateByTerm>
+            }
+          />
           <Route
             path="/userEdit"
             element={
-              <Private>
+              <PrivateAuth>
                 <UserEdit />
-              </Private>
+              </PrivateAuth>
             }
           />
           <Route
             path="/editConfirm"
             element={
-              <Private>
+              <PrivateAuth>
                 <EditConfirm />
-              </Private>
+              </PrivateAuth>
             }
           />
         </Routes>

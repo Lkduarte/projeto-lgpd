@@ -4,15 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import useAlert from "../utils/alerts";
 import authController from "../services/controllers/authController";
-import { IUser } from "../utils/interfaces";
+import { ISignedTerm, ITerm, IUser } from "../utils/interfaces";
+import userController from "../services/controllers/userController";
 
 interface AuthContextProps {
   authenticated: boolean;
   user: IUser | null;
-  loading: boolean;
+  mustSignTerm: ITerm | null;
   login: (x: string, y: string) => void;
   logout: () => void;
   updateUser: (x: IUser) => void;
+  signCurrentTerm: (x: ISignedTerm) => Promise<void>;
 }
 
 export const AuthContext = createContext({} as AuthContextProps);
@@ -20,10 +22,11 @@ export const AuthContext = createContext({} as AuthContextProps);
 export const AuthProvider = ({ children }: any) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<IUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [term, setTerm] = useState<ITerm | null>(null);
   const alert = useAlert();
 
   const login = async (email: string, password: string) => {
+    let loginSuccess = null;
     try {
       const response = await authController.login(email, password);
       const loggedUser = response.data;
@@ -31,9 +34,7 @@ export const AuthProvider = ({ children }: any) => {
       api.defaults.headers.common["Cookie"] = document.cookie;
 
       setUser(loggedUser);
-      setLoading(false);
-
-      navigate("/home");
+      loginSuccess = loggedUser._id;
     } catch (e: any) {
       const responseMessage = e.response.data.message;
       let errorMessage;
@@ -52,6 +53,19 @@ export const AuthProvider = ({ children }: any) => {
         html: errorMessage,
       });
     }
+
+    if (!loginSuccess) return;
+
+    try {
+      const response = await userController.hasSignedCurrentTerm(loginSuccess);
+
+      if (response) {
+        setTerm(response);
+        navigate("/currentTerm");
+      }
+
+      navigate("/home");
+    } catch (e) {}
   };
 
   const logout = () => {
@@ -61,15 +75,31 @@ export const AuthProvider = ({ children }: any) => {
     navigate("/login");
   };
 
+  const signCurrentTerm = async (x: ISignedTerm) => {
+    try {
+      await userController.signCurrentTerm(user?._id ?? "", x);
+
+      setTerm(null);
+
+      navigate("/home");
+    } catch (e) {
+      alert.criarAlerta({
+        icon: "error",
+        html: "Ocorreu um erro ao assinar o termo, tente novamente.",
+      });
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
         authenticated: !!user,
         user,
-        loading,
+        mustSignTerm: term,
         login,
         logout,
         updateUser: setUser,
+        signCurrentTerm,
       }}
     >
       {children}

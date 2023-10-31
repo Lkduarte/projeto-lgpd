@@ -1,24 +1,50 @@
+import { ISignedTerm, IUserData } from "../../utils/interfaces";
 import { RequestMethods, request } from "../api";
 
 class UserController {
-  async login(email: string, password: string) {
-    // return (await request(RequestMethods.POST, "/login", { email, password }))
-    //   .data;
-    return { user: { name: "teste" }, token: "aaaaaaa" };
+  async update(data: IUserData, _id: string) {
+    try {
+      const response = await request(
+        RequestMethods.PATCH,
+        `/user/updateUser/${_id}`,
+        { data }
+      );
+
+      return response.data;
+    } catch (e) {
+      return e;
+    }
   }
 
-  async update(data: any, _id: any) {
+  async hasSignedCurrentTerm(_id: string) {
     try {
-        const response = await request(
-          RequestMethods.PATCH,
-          `/user/updateUser/${_id}`,
-          {data}
-        );
-  
-        return response.data;
-      } catch (e) {
-        return e;
-      }
+      const response = await request(
+        RequestMethods.GET,
+        `/user/hasSignedCurrentTerm/${_id}`
+      );
+
+      if (response.data !== null) return response.data;
+
+      return false;
+    } catch (e: any) {
+      if (e.response.data) return e.response.data;
+      return e;
+    }
+  }
+
+  async signCurrentTerm(_id: string, data: ISignedTerm) {
+    try {
+      const response = await request(
+        RequestMethods.POST,
+        `/user/signCurrentTerm/${_id}`,
+        { signedTerm: data }
+      );
+
+      return response.data;
+    } catch (e: any) {
+      if (e.response.data) return e.response.data;
+      return e;
+    }
   }
 }
 
