@@ -89,8 +89,12 @@
   padding: 5px;
 }
 
-#nameField {
-  width: 100%;
+#userName {
+  width: 49%;
+}
+
+#lastName {
+  width: 49%;
 }
 
 #userEmail {
