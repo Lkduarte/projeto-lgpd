@@ -52,7 +52,7 @@ export const isOwner = async (
       });
     }
 
-    if (currentUserId.toString() === id) {
+    if (currentUserId.toString() !== id) {
       return res.status(403).json({
         message: "User can't delete himself",
       });
