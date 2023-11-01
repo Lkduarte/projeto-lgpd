@@ -8,7 +8,7 @@ import {
   createUser,
 } from "../services/userServices";
 import { authentication, random } from "../helpers";
-import { getCurrentTerm } from "services/termServices";
+import { getCurrentTerm } from "../services/termServices";
 
 export const getAllUsers = async (
   req: express.Request,
@@ -122,21 +122,80 @@ export const deleteUser = async (
   }
 };
 
+export const updatePassword = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { id } = req.params;
+    const { password, newPassword } = req.body;
+
+    if (!password || !newPassword) {
+      return res.status(400).json({
+        message: "old and new password are required for this operation",
+      });
+    }
+
+    const user = await getUserById(id).select(
+      "+authentication.salt +authentication.password"
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "user not found" });
+    }
+
+    const expectedHash = authentication(user.authentication.salt, password);
+
+    if (user.authentication.password != expectedHash) {
+      return res.status(401).json({
+        message: "User unauthorized",
+      });
+    }
+
+    const salt = random();
+
+    user.authentication.salt = salt;
+    user.authentication.password = authentication(salt, newPassword);
+
+    await user.save();
+
+    return res.status(200).end();
+  } catch (e) {
+    return res.status(400).json({
+      message: "An error occurred when tried to update user password",
+    });
+  }
+};
+
 export const updateUser = async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
     const { id } = req.params;
-    const { data } = req.body;
+    const { data, password } = req.body;
 
-    if (!data) {
+    if (!data || !password) {
       return res.status(400).json({
-        message: "data is required for this operation",
+        message: "data and password are required for this operation",
       });
     }
 
-    const user = await getUserById(id);
+    const user = await getUserById(id).select(
+      "+authentication.salt +authentication.password"
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "user not found" });
+    }
+
+    const expectedHash = authentication(user.authentication.salt, password);
+
+    if (user.authentication.password != expectedHash) {
+      return res.status(401).json({
+        message: "User unauthorized",
+      });
+    }
 
     user.data = data;
     await user.save();
@@ -146,6 +205,37 @@ export const updateUser = async (
     console.log(error);
     return res.status(400).json({
       message: "An error occurred when tried to update user",
+    });
+  }
+};
+
+export const signCurrentTerm = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { id } = req.params;
+
+    const { signedTerm } = req.body;
+
+    if (!id || !signedTerm) {
+      return res.status(400).json({
+        message: "signedTerm and user id are required for this operation",
+      });
+    }
+
+    const user = await getUserById(id);
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.signedTerms.push(signedTerm);
+
+    await user.save();
+
+    return res.status(200).json(user).end();
+  } catch (error) {
+    return res.status(400).json({
+      message: "An error occurred when tried to sign current term",
     });
   }
 };
@@ -166,10 +256,12 @@ export const hasSignedCurrentTerm = async (
     const currentTerm = await getCurrentTerm();
 
     if (!currentTerm) {
-      return res.status(404).json({ message: "Term not found" });
+      return res.status(200).json(null).end();
     }
 
-    if (!user.signedTerms.filter((x) => x.termId === currentTerm._id)) {
+    const hasSignedCurrentTerm =
+      user.signedTerms.filter((x) => x.termId === currentTerm._id).length !== 0;
+    if (!hasSignedCurrentTerm) {
       return res.status(200).json(currentTerm);
     }
 
