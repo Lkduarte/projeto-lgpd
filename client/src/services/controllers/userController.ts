@@ -2,12 +2,12 @@ import { ISignedTerm, IUserData } from "../../utils/interfaces";
 import { RequestMethods, request } from "../api";
 
 class UserController {
-  async update(data: IUserData, _id: string) {
+  async update(_id: string, password: string, data: IUserData) {
     try {
       const response = await request(
         RequestMethods.PATCH,
         `/user/updateUser/${_id}`,
-        { data }
+        { data, password }
       );
 
       return response.data;

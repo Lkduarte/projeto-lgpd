@@ -3,8 +3,8 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthContext, AuthProvider } from "../contexts/auth-context";
 import Login from "../modules/pages/login/login";
 import { UserRegisterPage } from "../modules/pages/users/usersRegister";
-import { UserEdit } from "../modules/pages/users/userEdit";
-import EditConfirm from "../modules/pages/users/editConfirm";
+import { UserEdit } from "../modules/pages/users/editUser/userEdit";
+import EditConfirm from "../modules/pages/users/editUser/editConfirm";
 import Home from "../modules/pages/home/home";
 import { TermPage } from "../modules/pages/term/termo";
 
