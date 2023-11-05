@@ -1,9 +1,15 @@
 export default interface User {
   _id: string;
-  email: string; // Encrypted
-  password: string; // Encrypted
+  email: string;
   data: UserData; // Encrypted
+  authentication: UserAuthentication;
   signedTerms: SignedTerm[];
+}
+
+interface UserAuthentication {
+  password: string;
+  salt: string;
+  sessionToken: string;
 }
 
 interface UserData {
