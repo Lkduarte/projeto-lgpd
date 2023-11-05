@@ -13,5 +13,8 @@ export const createTerm = async (values: Record<string, any>) => {
   );
 };
 
+export const updateTermById = (id: string, values: Record<string, any>) =>
+  Term.findByIdAndUpdate(id, values);
+
 export const deleteTermById = (id: string) =>
   Term.findOneAndDelete({ _id: id });

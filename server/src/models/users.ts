@@ -26,7 +26,6 @@ const UserSchema = new mongoose.Schema({
     salt: { type: String, select: false },
     sessionToken: { type: String, select: false },
   },
-  signedTerms: { type: Array, required: true },
 });
 
 export const User = mongoose.model("User", UserSchema);

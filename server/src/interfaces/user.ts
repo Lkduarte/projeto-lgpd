@@ -7,26 +7,26 @@ export default interface User {
 }
 
 interface UserData {
-  name: string; // Encrypted
-  lastName: string; // Encrypted
-  cpf: string; // Encrypted
-  phone: string; // Encrypted
-  address: address; // Encrypted
+  name: string;
+  lastName: string;
+  cpf: string;
+  phone: string;
+  address: address;
 }
 
 interface address {
-  cep: string; // Encrypted
-  street: string; // Encrypted
-  number: string; // Encrypted
-  complement: string; // Encrypted
-  neighborhood: string; // Encrypted
-  city: string; // Encrypted
-  state: string; // Encrypted
-  country: string; // Encrypted
+  cep: string;
+  street: string;
+  number: string;
+  complement: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  country: string;
 }
 
 interface SignedTerm {
-  termId: string;
+  userId: string;
   isAccepted: boolean;
   date: Date;
   signedOptions: SignedOption[];
@@ -34,5 +34,10 @@ interface SignedTerm {
 
 interface SignedOption {
   optionId: string;
+  signs: Sign[];
+}
+
+interface Sign {
+  date: Date;
   isAccepted: boolean;
 }

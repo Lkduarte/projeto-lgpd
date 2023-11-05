@@ -50,8 +50,9 @@ export const getCurrent = async (
 ) => {
   try {
     const term = await getCurrentTerm();
+    const { usersSigned, ...termo } = term;
 
-    return res.status(200).json(term);
+    return res.status(200).json(termo);
   } catch (error) {
     res.json(400).json({
       message: "An error occurred when tried to get current term",
@@ -75,6 +76,7 @@ export const register = async (req: express.Request, res: express.Response) => {
       options,
       isActual: true,
       date: new Date(),
+      usersSigned: [],
     });
 
     return res.status(200).json(term).end();

@@ -13,6 +13,6 @@ export default (router: express.Router) => {
   router.get("/term/getAll", isAuthenticated, getAllTerms);
   router.get("/term/current", getCurrent);
   router.get("/term/get/:id", isAuthenticated, getById);
-  router.post("/term/register", isAuthenticated, register);
+  router.post("/term/register", register);
   router.delete("/term/delete/:id", isAuthenticated, deleteTerm);
 };
