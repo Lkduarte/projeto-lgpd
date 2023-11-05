@@ -188,6 +188,19 @@ export const UserEdit = () => {
             Confirmar
           </button>
         </div>
+        <div className="editPasswordButtonContainer">
+          <button
+            onClick={() => navigate("/editpassword")}
+            className="linkButton"
+          >
+            Clique aqui para alterar sua senha
+          </button>
+        </div>
+        <div className="editPasswordButtonContainer">
+          <button onClick={() => navigate("/editterm")} className="linkButton">
+            Clique aqui para visualizar os termos e políticas de uso
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../../contexts/auth-context";
 import { useNavigate } from "react-router-dom";
 import { ISignedTerm, ITerm } from "../../../utils/interfaces";
+import "./termStyles.css";
 
 const defaultSignTermObject = (term: ITerm | null) => {
   return {
@@ -29,8 +30,8 @@ export const TermPage = () => {
   }
 
   return (
-    <>
-      <h1>Termos e Políticas de uso.</h1>
+    <div className="termoContainer">
+      <h1>Termos e Políticas de uso</h1>
       <div>
         <textarea
           name=""
@@ -39,7 +40,7 @@ export const TermPage = () => {
           rows={10}
           value={mustSignTerm.description}
           disabled={true}
-        ></textarea>
+        />
         <div className="checkboxContainer">
           <input
             className="checkbox"
@@ -77,16 +78,29 @@ export const TermPage = () => {
             <label htmlFor={`promoTitle_${index}`}>{option.description}</label>
           </div>
         ))}
-        <button
-          onClick={() => {
-            if (data.isAccepted) {
-              signCurrentTerm(data);
-            }
-          }}
-        >
-          Confirmar
-        </button>
+        <div className="termoButtonContainer">
+          <button
+            className="button loginButton"
+            onClick={() => {
+              if (data.isAccepted) {
+                signCurrentTerm(data);
+              }
+            }}
+          >
+            Confirmar
+          </button>
+          <button
+            className="button cancelButton"
+            // onClick={() => {
+            //   if (data.isAccepted) {
+            //     signCurrentTerm(data);
+            //   }
+            // }}
+          >
+            Recusar (Excluir conta)
+          </button>
+        </div>
       </div>
-    </>
+    </div>
   );
 };

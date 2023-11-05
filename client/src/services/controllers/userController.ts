@@ -16,6 +16,23 @@ class UserController {
     }
   }
 
+  async updatePassword(_id: string, password: string, newPassword: string) {
+    try {
+      const response = await request(
+        RequestMethods.POST,
+        `/user/updatePassword/${_id}`,
+        {
+          password,
+          newPassword,
+        }
+      );
+
+      return response.data;
+    } catch (e) {
+      return e;
+    }
+  }
+
   async hasSignedCurrentTerm(_id: string) {
     try {
       const response = await request(
@@ -27,7 +44,7 @@ class UserController {
 
       return false;
     } catch (e: any) {
-      if (e.response.data) return e.response.data;
+      if (e.response && e.response.data) return e.response.data;
       return e;
     }
   }
@@ -42,8 +59,36 @@ class UserController {
 
       return response.data;
     } catch (e: any) {
-      if (e.response.data) return e.response.data;
+      if (e.response && e.response.data) return e.response.data;
       return e;
+    }
+  }
+
+  async updateTermSign(_id: string, data: ISignedTerm) {
+    try {
+      const response = await request(
+        RequestMethods.POST,
+        `/user/updateTermSign/${_id}`,
+        { signedTerm: data }
+      );
+
+      return response.data;
+    } catch (e: any) {
+      if (e.response && e.response.data) return e.response.data;
+      return e;
+    }
+  }
+
+  async getCurrentTermSignature(_id: string) {
+    try {
+      const response = await request(
+        RequestMethods.GET,
+        `/user/getCurrentTermSignature/${_id}`
+      );
+
+      return response.data;
+    } catch (e: any) {
+      return null;
     }
   }
 }

@@ -35,7 +35,7 @@
   padding: 10px 0;
   border: none;
   border-radius: 5px;
-  color: #FFF;
+  color: #fff;
   cursor: pointer;
 }
 
@@ -50,7 +50,5 @@
 }
 
 .linkButton:hover {
-  color: #e1ddef;
+  color: #9a83ed;
 }
-
-

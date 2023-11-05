@@ -63,6 +63,10 @@ const WizardProvider = ({ children }: any) => {
       if (validate()) {
         setStep(WizardSteps.third_module);
         formik.setStatus("VALIDO");
+      } else {
+        alert.criarAlerta({
+          html: "Para prosseguir você deve concordar com os termos.",
+        });
       }
     } else if (currentStep === WizardSteps.third_module) {
       if (validate()) finish();

@@ -7,6 +7,8 @@ import { UserEdit } from "../modules/pages/users/editUser/userEdit";
 import EditConfirm from "../modules/pages/users/editUser/editConfirm";
 import Home from "../modules/pages/home/home";
 import { TermPage } from "../modules/pages/term/termo";
+import { EditPassword } from "../modules/pages/users/editpassword/editPassword";
+import { EditTerm } from "../modules/pages/users/editterm/editTerm";
 
 export const Router = () => {
   const PrivateAuth = ({ children }: any) => {
@@ -58,10 +60,26 @@ export const Router = () => {
             }
           />
           <Route
+            path="/editpassword"
+            element={
+              <PrivateAuth>
+                <EditPassword />
+              </PrivateAuth>
+            }
+          />
+          <Route
             path="/editConfirm"
             element={
               <PrivateAuth>
                 <EditConfirm />
+              </PrivateAuth>
+            }
+          />
+          <Route
+            path="/editterm"
+            element={
+              <PrivateAuth>
+                <EditTerm />
               </PrivateAuth>
             }
           />

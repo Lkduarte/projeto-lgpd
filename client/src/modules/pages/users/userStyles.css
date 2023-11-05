@@ -1,8 +1,4 @@
 .registerContainer {
-  /* position: fixed;
-  top: 60%;
-  left: 50%; */
-  /* transform: translate(-50%, -50%); */
   margin: 30px auto;
   padding: 30px;
   width: 80%;
@@ -52,6 +48,7 @@
   flex-direction: row;
   gap: 5px;
   width: 100%;
+  margin-top: 170px;
 }
 
 .button {
@@ -148,6 +145,10 @@
   width: 49%;
 }
 
+.cursorBlocked {
+  cursor: "not-allowed";
+}
+
 #userTermo {
   resize: none;
   background-color: transparent;
@@ -158,7 +159,13 @@
   border-radius: 5px;
 }
 
-.wizardContainerSS h3{
+.wizardContainerSS h3 {
   margin-bottom: 30px;
   text-align: center;
+}
+
+.editPasswordButtonContainer {
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
 }

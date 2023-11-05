@@ -1,10 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./headerStyles.css";
 import { useContext } from "react";
 import { AuthContext } from "../../../contexts/auth-context";
 
 function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { authenticated, logout } = useContext(AuthContext);
 
   return (
@@ -29,9 +30,11 @@ function Header() {
           ) : (
             <>
               <button onClick={() => navigate("/login")}>Fazer Login</button>
-              <button onClick={() => navigate("/userRegister")}>
-                Inscrever-se
-              </button>
+              {location.pathname !== "/userRegister" && (
+                <button onClick={() => navigate("/userRegister")}>
+                  Inscrever-se
+                </button>
+              )}
             </>
           )}
         </div>
