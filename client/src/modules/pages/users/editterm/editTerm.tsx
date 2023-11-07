@@ -26,7 +26,7 @@ export const EditTerm = () => {
 
     const signedTerm: ISignedTerm = {
       termId: termo._id,
-      isAccepted: signature.date,
+      isAccepted: signature.isAccepted,
       date: signature.date,
       signedOptions: signature.signedOptions.map((x: any) => {
         return {
