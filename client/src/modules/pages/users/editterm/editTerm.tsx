@@ -7,7 +7,7 @@ import "./editTermStyles.css";
 import { ISignedTerm, ITerm } from "../../../../utils/interfaces";
 
 export const EditTerm = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const [term, setTerm] = useState<ITerm | null>(null);
   const [userSignature, setUserSignature] = useState<ISignedTerm | null>(null);
   const alert = useAlert();
@@ -26,7 +26,7 @@ export const EditTerm = () => {
 
     const signedTerm: ISignedTerm = {
       termId: termo._id,
-      isAccepted: signature.isAccepted,
+      isAccepted: true,
       date: signature.date,
       signedOptions: signature.signedOptions.map((x: any) => {
         return {
@@ -36,6 +36,20 @@ export const EditTerm = () => {
       }),
     };
     setUserSignature(signedTerm);
+  };
+
+  const deleteMyself = () => {
+    alert.criarConfirmacao({
+      html: "Deseja realmente excluir sua conta?",
+      confirmAction: async () => {
+        const data = await userController.deleteUser(user?._id ?? "");
+
+        if (data) {
+          alert.criarAlerta({ html: "Conta excluída com sucesso!" });
+          logout();
+        }
+      },
+    });
   };
 
   useEffect(() => {
@@ -93,15 +107,17 @@ export const EditTerm = () => {
             className="checkbox"
             id="promoTitle"
             type="checkbox"
-            checked={userSignature ? userSignature.isAccepted : false}
-            onChange={(e) => {
-              if (userSignature) {
-                setUserSignature({
-                  ...userSignature,
-                  isAccepted: e.target.checked,
-                });
-              }
-            }}
+            disabled
+            checked={true}
+            // onChange={(e) => {
+
+            //   if (userSignature) {
+            //     setUserSignature({
+            //       ...userSignature,
+            //       isAccepted: e.target.checked,
+            //     });
+            //   }
+            // }}
           />
           <label htmlFor="promoTitle">
             Ao confirmar você confirma que leu e ACEITOU os termos acima.
@@ -159,7 +175,7 @@ export const EditTerm = () => {
           >
             Confirmar
           </button>
-          <button className="button cancelButton">
+          <button onClick={deleteMyself} className="button cancelButton">
             Recusar (Excluir conta)
           </button>
         </div>

@@ -1,14 +1,18 @@
 import express from "express";
 
 import {
-  deleteUserById,
   getUsers,
   getUserById,
   getUserByEmail,
   createUser,
 } from "../services/userServices";
-import { authentication, random } from "../helpers";
+import { authentication, cryptography, decryption, random } from "../helpers";
 import { getCurrentTerm, getTermById } from "../services/termServices";
+import {
+  createKey,
+  deleteKeyByUserId,
+  getKeyById,
+} from "../services/keyServices";
 
 export const getAllUsers = async (
   req: express.Request,
@@ -31,14 +35,23 @@ export const getById = async (req: express.Request, res: express.Response) => {
 
   try {
     const user = await getUserById(id);
-    console.log(user);
     if (!user) {
       return res.status(404).json({
         message: "User not found",
       });
     }
+    const key = await getKeyById(user._id);
 
-    return res.status(200).json(user);
+    if (!key) return res.status(404).json({ message: "user not found" });
+
+    const userData = decryption(key.key, user.data);
+
+    const userObject = {
+      ...user,
+      data: userData,
+    };
+
+    return res.status(200).json(userObject);
   } catch (error) {
     console.log(error);
     return res.status(400).json({
@@ -56,7 +69,20 @@ export const getByEmail = async (
 
     const user = await getUserByEmail(email);
 
-    return res.status(200).json(user);
+    if (!user) return res.status(404).json({ message: "user not found" });
+
+    const key = await getKeyById(user._id);
+
+    if (!key) return res.status(404).json({ message: "user not found" });
+
+    const userData = decryption(key.key, user.data);
+
+    const userObject = {
+      ...user,
+      data: userData,
+    };
+
+    return res.status(200).json(userObject);
   } catch (error) {
     res.json(400).json({
       message: "An error occurred when tried to get user by email",
@@ -91,14 +117,20 @@ export const register = async (req: express.Request, res: express.Response) => {
     }
 
     const salt = random();
+    const saltForData = random();
+
+    const userData = cryptography(saltForData, data);
+
     const user = await createUser({
       email,
-      data,
+      data: userData,
       authentication: {
         salt,
         password: authentication(salt, password),
       },
     });
+
+    await createKey({ userId: user._id, key: saltForData });
 
     const termData = signedTerms[0];
     const term = await getTermById(termData.termId);
@@ -107,9 +139,8 @@ export const register = async (req: express.Request, res: express.Response) => {
     if (term) {
       const data = {
         userId: user._id,
-        isAccepted: termData.isAccepted,
         date,
-        signs: [{ date: new Date(), isAccepted: termData.isAccepted }],
+        signs: [{ date: new Date() }],
         signedOptions: [] as any[],
       };
 
@@ -130,8 +161,10 @@ export const register = async (req: express.Request, res: express.Response) => {
 
     return res.status(200).json(user).end();
   } catch (error) {
+    console.log(error);
     return res.status(400).json({
       message: "An error occurred when tried to create user",
+      error,
     });
   }
 };
@@ -143,9 +176,20 @@ export const deleteUser = async (
   try {
     const { id } = req.params;
 
-    const deletedUser = await deleteUserById(id);
+    const user = await getUserById(id);
 
-    return res.json(deletedUser);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+    const key = await getKeyById(user._id);
+
+    if (!key) return res.status(404).json({ message: "user not found" });
+
+    await deleteKeyByUserId(user._id);
+
+    return res.status(200).json({ deleted: true });
   } catch (error) {
     console.log(error);
     return res.status(400).json({
@@ -230,7 +274,11 @@ export const updateUser = async (
       });
     }
 
-    user.data = data;
+    const key = await getKeyById(user._id);
+
+    if (!key) return res.status(404).json({ message: "user not found" });
+
+    user.data = cryptography(key.key, data);
     await user.save();
 
     return res.status(200).json(user).end();
@@ -269,9 +317,8 @@ export const signCurrentTerm = async (
     const date = new Date();
     const data = {
       userId: id,
-      isAccepted: signData.isAccepted,
       date,
-      signs: [{ date: date, isAccepted: signData.isAccepted }],
+      signs: [{ date: date }],
       signedOptions: [] as any[],
     };
 
@@ -333,9 +380,8 @@ export const updateTermSign = async (
     const signIndex = term.usersSigned.indexOf(sign);
     const date = new Date();
 
-    sign.isAccepted = signData.isAccepted;
     sign.date = date;
-    sign.signs.push({ date: date, isAccepted: signData.isAccepted });
+    sign.signs.push({ date: date });
 
     signData.signedOptions.forEach((so) => {
       const signedOption = sign.signedOptions.find(
@@ -387,8 +433,12 @@ export const getCurrentTermSignature = async (
     if (!signature)
       return res.status(404).json({ message: "Signature not found" });
 
-    term.usersSigned = [];
-    const termo = { signature, ...term._doc };
+    const termo = {
+      signature,
+      _id: term._id,
+      description: term.description,
+      options: term.options,
+    };
 
     return res.status(200).json(termo);
   } catch (e) {

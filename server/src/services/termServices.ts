@@ -1,4 +1,4 @@
-import { Term } from "../models/term";
+import { Term } from "../index";
 
 export const getTerms = () => Term.find();
 

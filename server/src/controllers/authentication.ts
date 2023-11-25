@@ -1,7 +1,8 @@
 import express from "express";
 
 import { getUserByEmail } from "../services/userServices";
-import { authentication, random } from "../helpers";
+import { authentication, decryption, random } from "../helpers";
+import { getKeyById } from "../services/keyServices";
 
 export const login = async (req: express.Request, res: express.Response) => {
   try {
@@ -31,6 +32,10 @@ export const login = async (req: express.Request, res: express.Response) => {
       });
     }
 
+    const key = await getKeyById(user._id);
+
+    if (!key) return res.status(404).json({ message: "user not found" });
+
     const salt = random();
     user.authentication.sessionToken = authentication(
       salt,
@@ -44,7 +49,13 @@ export const login = async (req: express.Request, res: express.Response) => {
       path: "/",
     });
 
-    return res.status(200).json(user).end();
+    const userObject = {
+      email: user.email,
+      _id: user._id,
+      data: decryption(key.key, user.data),
+    };
+
+    return res.status(200).json(userObject).end();
   } catch (error) {
     console.log(error);
     return res.status(400).json({

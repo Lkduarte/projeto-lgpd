@@ -50,7 +50,10 @@ export const getCurrent = async (
 ) => {
   try {
     const term = await getCurrentTerm();
-    const { usersSigned, ...termo } = term;
+    if (!term) return res.status(404).json({ message: "Term does not exist" });
+    term.usersSigned = [];
+
+    const termo = term;
 
     return res.status(200).json(termo);
   } catch (error) {

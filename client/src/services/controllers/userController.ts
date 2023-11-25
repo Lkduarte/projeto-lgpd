@@ -91,6 +91,19 @@ class UserController {
       return null;
     }
   }
+
+  async deleteUser(_id: string) {
+    try {
+      const response = await request(
+        RequestMethods.DELETE,
+        `/user/deleteUser/${_id}`
+      );
+
+      return response.data;
+    } catch (e: any) {
+      return null;
+    }
+  }
 }
 
 const userController = new UserController();

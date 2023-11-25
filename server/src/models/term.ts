@@ -1,6 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { nanoid } from "nanoid";
 import { OptionType } from "./enums/OptionTypeEnum";
+import { mongoConnection } from "../index";
+import { ITerm } from "interfaces/term";
 
 // User Config
 const OptionSchema = new mongoose.Schema({
@@ -28,7 +30,7 @@ const SignSchema = new mongoose.Schema({
   signedOptions: { type: Array, required: true },
 });
 
-const TermSchema = new mongoose.Schema({
+export const TermSchema = new mongoose.Schema({
   _id: { type: String, default: () => nanoid() },
   description: { type: String, required: true },
   date: { type: Date, required: true },
@@ -36,5 +38,3 @@ const TermSchema = new mongoose.Schema({
   options: [OptionSchema],
   usersSigned: { type: Array, required: true },
 });
-
-export const Term = mongoose.model("Term", TermSchema);

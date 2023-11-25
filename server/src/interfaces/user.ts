@@ -1,9 +1,14 @@
-export default interface User {
-  _id: string;
+import mongoose, { Document } from "mongoose";
+
+export interface IUser extends Document {
   email: string;
-  data: UserData; // Encrypted
+  data: string;
   authentication: UserAuthentication;
-  signedTerms: SignedTerm[];
+}
+
+export interface IKey extends Document {
+  userId: mongoose.Schema.Types.ObjectId;
+  key: string;
 }
 
 interface UserAuthentication {
@@ -12,7 +17,7 @@ interface UserAuthentication {
   sessionToken: string;
 }
 
-interface UserData {
+export interface UserData {
   name: string;
   lastName: string;
   cpf: string;
@@ -29,21 +34,4 @@ interface address {
   city: string;
   state: string;
   country: string;
-}
-
-interface SignedTerm {
-  userId: string;
-  isAccepted: boolean;
-  date: Date;
-  signedOptions: SignedOption[];
-}
-
-interface SignedOption {
-  optionId: string;
-  signs: Sign[];
-}
-
-interface Sign {
-  date: Date;
-  isAccepted: boolean;
 }

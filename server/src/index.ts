@@ -6,8 +6,13 @@ import compression from "compression";
 import cors from "cors";
 
 import router from "./router";
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { config } from "./config/config";
+import { IKey, IUser } from "./interfaces/user";
+import { UserSchema } from "./models/users";
+import { ITerm } from "./interfaces/term";
+import { TermSchema } from "./models/term";
+import { KeySchema } from "./models/key";
 
 const app = express();
 
@@ -28,13 +33,24 @@ server.listen(config.server.port, () => {
   console.log(`Server running on http://localhost:${config.server.port}/`);
 });
 
-mongoose.Promise = Promise;
-
-mongoose.connect(config.mongo.url, {
+const mongoConnection = mongoose.createConnection(config.mongo.url, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 });
 
-mongoose.connection.on("error", (error: Error) => console.log(error));
+const mongoKeysConnection = mongoose.createConnection(config.mongoKeys.url, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+});
+
+mongoose.Promise = Promise;
 
 app.use("/", router());
+
+const User: Model<IUser> = mongoConnection.model<IUser>("User", UserSchema);
+
+const Term: Model<ITerm> = mongoConnection.model<ITerm>("Term", TermSchema);
+
+const Key: Model<IKey> = mongoKeysConnection.model<IKey>("Key", KeySchema);
+
+export { mongoConnection, mongoKeysConnection, User, Term, Key };
