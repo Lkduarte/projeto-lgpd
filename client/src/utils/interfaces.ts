@@ -1,6 +1,5 @@
 interface IUser {
   _id: string | undefined | null;
-  email: string;
   password: string;
   passwordConfirmation: string;
   data: IUserData;
@@ -11,6 +10,7 @@ interface IUserData {
   name: string;
   lastName: string;
   cpf: string;
+  email: string;
   phone: string;
   address: IAddress;
 }

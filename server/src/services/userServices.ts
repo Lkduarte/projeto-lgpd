@@ -1,8 +1,9 @@
-import { User } from "../index";
+import { User, listaEmails } from "../index";
 
 export const getUsers = () => User.find();
 
-export const getUserByEmail = (email: string) => User.findOne({ email });
+export const getUserIdByEmail = (email: string) =>
+  listaEmails.find((r) => r.email === email);
 
 export const getUserBySessionToken = (sessionToken: string) =>
   User.findOne({ "authentication.sessionToken": sessionToken });

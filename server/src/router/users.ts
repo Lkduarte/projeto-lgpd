@@ -11,10 +11,12 @@ import {
   updatePassword,
   updateTermSign,
   getCurrentTermSignature,
+  listEmails,
 } from "../controllers/users";
 import { isAuthenticated, isOwner } from "../middlewares";
 
 export default (router: express.Router) => {
+  router.get("/user/listEmails", listEmails);
   router.get("/user/getUsers", isAuthenticated, getAllUsers);
   router.get("/user/getUserById/:id", isAuthenticated, getById);
   router.get(

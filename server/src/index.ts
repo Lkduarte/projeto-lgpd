@@ -8,11 +8,12 @@ import cors from "cors";
 import router from "./router";
 import mongoose, { Model } from "mongoose";
 import { config } from "./config/config";
-import { IKey, IUser } from "./interfaces/user";
+import { IEmailList, IKey, IUser } from "./interfaces/user";
 import { UserSchema } from "./models/users";
 import { ITerm } from "./interfaces/term";
 import { TermSchema } from "./models/term";
 import { KeySchema } from "./models/key";
+import { listAllEmails } from "./services/keyServices";
 
 const app = express();
 
@@ -26,12 +27,6 @@ app.use(
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
-
-const server = http.createServer(app);
-
-server.listen(config.server.port, () => {
-  console.log(`Server running on http://localhost:${config.server.port}/`);
-});
 
 const mongoConnection = mongoose.createConnection(config.mongo.url, {
   useUnifiedTopology: true,
@@ -53,4 +48,34 @@ const Term: Model<ITerm> = mongoConnection.model<ITerm>("Term", TermSchema);
 
 const Key: Model<IKey> = mongoKeysConnection.model<IKey>("Key", KeySchema);
 
-export { mongoConnection, mongoKeysConnection, User, Term, Key };
+const listaEmails: IEmailList[] = [];
+
+function removeFromListaEmails(data: string) {
+  const itemFound = listaEmails.find((i) => i._id === data || i.email === data);
+  if (!itemFound) return false;
+
+  const itemFoundIndex = listaEmails.indexOf(itemFound);
+  listaEmails.splice(itemFoundIndex, 1);
+  return true;
+}
+
+const server = http.createServer(app);
+
+server.listen(config.server.port, async () => {
+  console.log(`Server running on http://localhost:${config.server.port}/`);
+
+  const data = await listAllEmails();
+  if (data && data.length > 0) {
+    data.forEach((i) => listaEmails.push(i));
+  }
+});
+
+export {
+  mongoConnection,
+  mongoKeysConnection,
+  listaEmails,
+  removeFromListaEmails,
+  User,
+  Term,
+  Key,
+};

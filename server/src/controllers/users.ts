@@ -3,8 +3,8 @@ import express from "express";
 import {
   getUsers,
   getUserById,
-  getUserByEmail,
   createUser,
+  getUserIdByEmail,
 } from "../services/userServices";
 import { authentication, cryptography, decryption, random } from "../helpers";
 import { getCurrentTerm, getTermById } from "../services/termServices";
@@ -13,6 +13,18 @@ import {
   deleteKeyByUserId,
   getKeyById,
 } from "../services/keyServices";
+import { listaEmails, removeFromListaEmails } from "../index";
+
+export const listEmails = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    return res.status(200).json(listaEmails);
+  } catch (error) {
+    return res.status(400).json({ error });
+  }
+};
 
 export const getAllUsers = async (
   req: express.Request,
@@ -60,55 +72,19 @@ export const getById = async (req: express.Request, res: express.Response) => {
   }
 };
 
-export const getByEmail = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  try {
-    const { email } = req.params;
-
-    const user = await getUserByEmail(email);
-
-    if (!user) return res.status(404).json({ message: "user not found" });
-
-    const key = await getKeyById(user._id);
-
-    if (!key) return res.status(404).json({ message: "user not found" });
-
-    const userData = decryption(key.key, user.data);
-
-    const userObject = {
-      ...user,
-      data: userData,
-    };
-
-    return res.status(200).json(userObject);
-  } catch (error) {
-    res.json(400).json({
-      message: "An error occurred when tried to get user by email",
-      error: error,
-    });
-  }
-};
-
 export const register = async (req: express.Request, res: express.Response) => {
   try {
-    const { email, password, data, signedTerms } = req.body;
+    const { password, data, signedTerms } = req.body;
 
-    if (
-      !email ||
-      !password ||
-      !data ||
-      !signedTerms ||
-      signedTerms.length === 0
-    ) {
+    if (!password || !data || !signedTerms || signedTerms.length === 0) {
       return res.status(400).json({
         message:
           "email, password, signedTerms and data are required for registration",
       });
     }
 
-    const existingUser = await getUserByEmail(email);
+    const email = data.email;
+    const existingUser = getUserIdByEmail(email);
 
     if (existingUser) {
       return res.status(400).json({
@@ -122,7 +98,6 @@ export const register = async (req: express.Request, res: express.Response) => {
     const userData = cryptography(saltForData, data);
 
     const user = await createUser({
-      email,
       data: userData,
       authentication: {
         salt,
@@ -131,6 +106,8 @@ export const register = async (req: express.Request, res: express.Response) => {
     });
 
     await createKey({ userId: user._id, key: saltForData });
+
+    listaEmails.push({ _id: user._id, email: data.email });
 
     const termData = signedTerms[0];
     const term = await getTermById(termData.termId);
@@ -188,6 +165,8 @@ export const deleteUser = async (
     if (!key) return res.status(404).json({ message: "user not found" });
 
     await deleteKeyByUserId(user._id);
+
+    removeFromListaEmails(id);
 
     return res.status(200).json({ deleted: true });
   } catch (error) {
@@ -466,10 +445,12 @@ export const hasSignedCurrentTerm = async (
     if (!currentTerm) {
       return res.status(200).json(null).end();
     }
-
     const hasSignedCurrentTerm = currentTerm.usersSigned.some(
       (x) => x.userId === id
     );
+
+    console.log(hasSignedCurrentTerm);
+
     if (!hasSignedCurrentTerm) {
       return res.status(200).json(currentTerm);
     }

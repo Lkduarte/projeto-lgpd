@@ -1,7 +1,11 @@
 import mongoose, { Document } from "mongoose";
 
-export interface IUser extends Document {
+export interface IEmailList {
   email: string;
+  _id: string;
+}
+
+export interface IUser extends Document {
   data: string;
   authentication: UserAuthentication;
 }
@@ -21,6 +25,7 @@ export interface UserData {
   name: string;
   lastName: string;
   cpf: string;
+  email: string;
   phone: string;
   address: address;
 }

@@ -32,13 +32,13 @@ enum WizardSteps {
 
 const defaultUser: IUser = {
   _id: undefined,
-  email: "",
   password: "",
   passwordConfirmation: "",
   data: {
     name: "",
     lastName: "",
     cpf: "",
+    email: "",
     phone: "",
     address: {
       cep: "",
@@ -55,7 +55,6 @@ const defaultUser: IUser = {
 };
 
 const validation = yup.object<IUser>().shape({
-  email: yup.string().required().email(),
   password: yup.string().required().min(6),
   passwordConfirmation: yup
     .string()
@@ -71,6 +70,7 @@ const validation = yup.object<IUser>().shape({
       return signTerm.isAccepted;
     }),
   data: yup.object<IUserData>().shape({
+    email: yup.string().required().email(),
     name: yup.string().required(),
     lastName: yup.string().required(),
     cpf: yup
@@ -99,10 +99,10 @@ const validation = yup.object<IUser>().shape({
 
 const validateFirstStep = (errors: FormikErrors<IUser>) => {
   return !(
-    errors.email ||
     errors.password ||
     errors.passwordConfirmation ||
-    (errors.data && (errors.data.name || errors.data.lastName))
+    (errors.data &&
+      (errors.data.name || errors.data.lastName || errors.data.email))
   );
 };
 

@@ -1,6 +1,6 @@
 import express from "express";
 
-import { getUserByEmail } from "../services/userServices";
+import { getUserById, getUserIdByEmail } from "../services/userServices";
 import { authentication, decryption, random } from "../helpers";
 import { getKeyById } from "../services/keyServices";
 
@@ -14,7 +14,15 @@ export const login = async (req: express.Request, res: express.Response) => {
       });
     }
 
-    const user = await getUserByEmail(email).select(
+    const userId = getUserIdByEmail(email);
+
+    if (!userId) {
+      return res.status(401).json({
+        message: "User unauthorized",
+      });
+    }
+
+    const user = await getUserById(userId._id).select(
       "+authentication.salt +authentication.password"
     );
 
@@ -50,7 +58,6 @@ export const login = async (req: express.Request, res: express.Response) => {
     });
 
     const userObject = {
-      email: user.email,
       _id: user._id,
       data: decryption(key.key, user.data),
     };

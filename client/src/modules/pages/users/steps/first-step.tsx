@@ -48,11 +48,15 @@ export const FirstStep = () => {
         idContainer="userEmail"
         label="E-mail *"
         placeholder="E-mail"
-        value={user.email}
+        value={user.data.email}
         onChange={(e) => {
-          setFieldValue("email", e);
+          setFieldValue("data.email", e);
         }}
-        isValid={formik.status === "VALIDO" ? true : !errors.email}
+        isValid={
+          formik.status === "VALIDO"
+            ? true
+            : !(errors.data && errors.data.email)
+        }
       />
       <InputFieldComponent
         htmlFor="password"
